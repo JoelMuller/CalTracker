@@ -1,8 +1,10 @@
 package com.jamgm.CalTracker.service;
 
-import com.jamgm.CalTracker.model.FoodItem;
-import com.jamgm.CalTracker.web.rest.DTO.FoodItemDTO;
-import com.jamgm.CalTracker.web.rest.transformer.FoodItemTransformer;
+import com.jamgm.CalTracker.model.FoodProduct;
+import com.jamgm.CalTracker.model.SearchItems;
+import com.jamgm.CalTracker.web.rest.DTO.FoodProductDTO;
+import com.jamgm.CalTracker.web.rest.transformer.FoodProductTransformer;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -17,18 +19,19 @@ public class OpenFoodFactsApiService {
         this.webClientOther = webClientBuilder.baseUrl("https://nl.openfoodfacts.org/api/v2").build();
     }
 
-    public Mono<FoodItem> getFoodItemByBarcode(long barcode){
+    public Mono<FoodProduct> getFoodItemByBarcode(long barcode){
         return this.webClientOther.get()
                 .uri("/product/" + barcode)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(FoodItemDTO.class)
-                .map(FoodItemTransformer::fromDto);
+                .bodyToMono(FoodProductDTO.class)
+                .map(FoodProductTransformer::fromDto);
     }
 
-    /*public Mono<FoodItem[]> searchFoodItemsBySearchTerm(String searchTerm){
-        return this.webClientSearch.get()
-                .uri("/search_terms=" + searchTerm + "&json=1")
-                .retrieve()
-                .bodyToMono(); //make similar file to openfoodfactsdto but for search
-    }*/
+//    public Mono<SearchItems[]> searchFoodItemsBySearchTerm(String searchTerm){
+//        return this.webClientSearch.get()
+//                .uri("/search_terms=" + searchTerm + "&json=1")
+//                .retrieve()
+//                .bodyToMono(); //make similar file to openfoodfactsdto but for search
+//    }
 }

@@ -11,7 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Product {
+public class FoodProduct {
+    private String barcode;
     private String product_name;
     @JsonSetter
     public void setCategories(Object categories) {
