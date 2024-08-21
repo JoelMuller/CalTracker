@@ -1,6 +1,6 @@
 package com.jamgm.CalTracker.repository;
 
-import com.jamgm.CalTracker.model.FoodItem;
+//import com.jamgm.CalTracker.model.FoodItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
