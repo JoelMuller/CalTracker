@@ -24,12 +24,4 @@ public class ProductDTO {
     private NutrimentsDTO nutriments;
     @JsonProperty("serving_size")
     private String serving_size;
-
-//    @JsonSetter("categories")
-//    public void setCategoriesString(String categoriesString) {
-//        this.categoriesString = categoriesString;
-//        if (categoriesString != null && !categoriesString.isEmpty()) {
-//            this.categories = Arrays.asList(categoriesString.split("\\s*,\\s*"));
-//        }
-//    }
 }
