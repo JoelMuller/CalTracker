@@ -1,6 +1,7 @@
 package com.jamgm.CalTracker.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 public class FoodProduct {
     private String barcode;
     private String product_name;

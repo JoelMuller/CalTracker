@@ -25,7 +25,7 @@ public class OpenFoodFactsApiService {
         this.webClientOther = webClientBuilder.baseUrl("https://nl.openfoodfacts.org/api/v2").build();
     }
 
-    public Mono<FoodProduct> getFoodItemByBarcode(long barcode){
+    public Mono<FoodProduct> getFoodItemByBarcode(String barcode){
         return this.webClientOther.get()
                 .uri("/product/" + barcode)
                 .accept(MediaType.APPLICATION_JSON)
