@@ -19,5 +19,7 @@ public class LogFoodProduct {
     private long id;
     private String FoodProductBarcode;
     private LocalDate date;
-//    private User user
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

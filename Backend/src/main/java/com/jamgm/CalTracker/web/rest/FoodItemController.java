@@ -1,6 +1,7 @@
 package com.jamgm.CalTracker.web.rest;
 
 import com.jamgm.CalTracker.model.FoodProduct;
+import com.jamgm.CalTracker.model.SearchItems;
 import com.jamgm.CalTracker.service.FoodProductService;
 import com.jamgm.CalTracker.web.rest.DTO.LogFoodProductDTO;
 import com.jamgm.CalTracker.web.rest.DTO.ProductDTO;
@@ -27,13 +28,13 @@ public class FoodItemController {
     @GetMapping(value = "/product/{barcode}")
     @Operation(summary = "Get nutrition information by barcode")
     public Mono<ProductDTO> getFoodItemByBarcode(@PathVariable("barcode") final String barcode){
-        var product = this.foodProductService.getFoodItemByBarcode(barcode);
+        Mono<FoodProduct> product = this.foodProductService.getFoodItemByBarcode(barcode);
         return product.map(FoodProductTransformer::toDto);
     }
 
     @GetMapping(value = "/search/{search_terms}")
     public Mono<SearchItemsDTO> searchFoodItemsBySearchTerm(@PathVariable("search_terms") final String terms){
-        var products = this.foodProductService.searchFoodItemsBySearchTerm(terms);
+        Mono<SearchItems> products = this.foodProductService.searchFoodItemsBySearchTerm(terms);
         return products.map(SearchItemsTransformer::toDto);
     }
 
