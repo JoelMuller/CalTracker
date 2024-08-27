@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -16,24 +17,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/user/{id}")
+    @GetMapping(value = "/{id}")
     public UserDTO getUserById(@PathVariable("id") final long id){
         return UserTransformer.toDto(this.userService.getUserById(id).get());
     }
 
-    @PostMapping(value = "/user")
+    @PostMapping
     public void createUser(@RequestBody @Valid UserDTO userDTO){
         this.userService.createUser(UserTransformer.fromDto(userDTO));
     }
 
-    @PutMapping(value = "/user")
+    @PutMapping
     public UserDTO updateUser(@RequestBody @Valid UserDTO userDTO){
         return UserTransformer.toDto(
                 this.userService.updateUser(
                         UserTransformer.fromDto(userDTO)));
     }
 
-    @DeleteMapping(value = "/user/{id}")
+    @DeleteMapping(value = "/{id}")
     public void deleteUserById(@PathVariable("id") final long id){
         this.userService.deleteUser(id);
     }

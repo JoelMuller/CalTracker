@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/calculate")
 public class CalculationsController {
     private CalorieCalculationsService calculationsService;
 
@@ -17,7 +19,7 @@ public class CalculationsController {
         this.calculationsService = calculationsService;
     }
 
-    @PostMapping(value = "/calculate/bmr")
+    @PostMapping(value = "/bmr")
     public ResponseEntity<Double> getBasalMetabolicRate(@RequestBody @Valid BasalMetabolicRateDTO dto){
         if(dto.getActivity() != 0){
             return new ResponseEntity<>(this.calculationsService.BasalMetabolicRateWithActivityLevel
@@ -28,7 +30,7 @@ public class CalculationsController {
         }
     }
 
-    @PostMapping(value = "/calculate/calPerDay")
+    @PostMapping(value = "/calPerDay")
     public ResponseEntity<?> getDailyCaloricIntakePerDay(@RequestBody @Valid BasalMetabolicRateDTO dto){
         if(dto.getUserId() != 0){
             return new ResponseEntity<>(this.calculationsService.DailyCaloricIntakePerDay

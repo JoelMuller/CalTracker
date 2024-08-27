@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 
 @RestController
+@RequestMapping("/foodItem")
 public class FoodItemController {
     private final FoodProductService foodProductService;
 
@@ -45,10 +46,16 @@ public class FoodItemController {
         this.foodProductService.logFoodItem(logFoodProductDTO);
     }
 
-    @GetMapping(value = "/getItemsConsumedByDay/{date}")
+    @GetMapping(value = "/getItemsConsumedByDay/{userId}")
     @Operation(summary = "Get all food items consumed by given date")
-    public Flux<FoodProduct> getAllItemsConsumedByDate(@PathVariable("date") final String date){
+    public Flux<FoodProduct> getAllItemsConsumedByDate(@PathVariable("userId") final long userId,
+                                                       @RequestParam("date") final String date){
         LocalDate givenDate = LocalDate.parse(date);
-        return this.foodProductService.getFoodItemsByDate(givenDate);
+        return this.foodProductService.getFoodItemsByDate(givenDate, userId);
+    }
+    @GetMapping(value = "/getProteinConsumedByDay/{userId}")
+    public Mono<Double> getProteinsConsumedByDay(@PathVariable("userId") final long userId,
+                                                 @RequestParam("date") final String date){
+        return this.foodProductService.getProteinConsumedByDay(this.getAllItemsConsumedByDate(userId,date));
     }
 }
