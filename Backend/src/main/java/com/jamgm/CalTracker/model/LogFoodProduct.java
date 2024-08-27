@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "LogFoodProduct")
+@Table(name = "log_food_product")
 public class LogFoodProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

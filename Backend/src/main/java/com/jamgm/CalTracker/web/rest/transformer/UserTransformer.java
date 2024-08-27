@@ -6,6 +6,7 @@ import com.jamgm.CalTracker.web.rest.DTO.UserDTO;
 public class UserTransformer {
     public static UserDTO toDto(User user){
         return UserDTO.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .weightLossPerWeek(user.getWeightLossPerWeek())
