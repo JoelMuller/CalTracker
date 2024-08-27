@@ -32,9 +32,10 @@ public class FoodItemController {
         return product.map(FoodProductTransformer::toDto);
     }
 
-    @GetMapping(value = "/search/{search_terms}")
-    public Mono<SearchItemsDTO> searchFoodItemsBySearchTerm(@PathVariable("search_terms") final String terms){
-        Mono<SearchItems> products = this.foodProductService.searchFoodItemsBySearchTerm(terms);
+    @GetMapping(value = "/search")
+    public Mono<SearchItemsDTO> searchFoodItemsBySearchTerm(@RequestParam("search_terms") final String terms,
+                                                            @RequestParam("page") final int page){
+        Mono<SearchItems> products = this.foodProductService.searchFoodItemsBySearchTerm(terms, page);
         return products.map(SearchItemsTransformer::toDto);
     }
 

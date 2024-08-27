@@ -34,7 +34,7 @@ public class OpenFoodFactsApiService {
                 .map(FoodProductTransformer::fromDto);
     }
 
-    public Mono<SearchItems> searchFoodItemsBySearchTerm(String searchTerm){
+    public Mono<SearchItems> searchFoodItemsBySearchTerm(String searchTerm, int page){
         //api v2 has more customization to receive items with only the info you need
         //with api v2 you can't give a search term to the call and with v1 you can but
         //you get a bunch of data that is not needed
@@ -43,6 +43,7 @@ public class OpenFoodFactsApiService {
                         .queryParam("search_terms", searchTerm)
                         .queryParam("json", "1")
                         .queryParam("page_size", "10")
+                        .queryParam("page", page)
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()

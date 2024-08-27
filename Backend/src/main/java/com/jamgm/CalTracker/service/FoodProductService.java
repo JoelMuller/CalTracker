@@ -31,8 +31,8 @@ public class FoodProductService {
         return this.openFoodFactsApiService.getFoodItemByBarcode(barcode);
     }
 
-    public Mono<SearchItems> searchFoodItemsBySearchTerm(String terms){
-        return this.openFoodFactsApiService.searchFoodItemsBySearchTerm(terms);
+    public Mono<SearchItems> searchFoodItemsBySearchTerm(String terms, int page){
+        return this.openFoodFactsApiService.searchFoodItemsBySearchTerm(terms, page);
     }
 
     public void logFoodItem(LogFoodProductDTO logFoodProductDTO){
