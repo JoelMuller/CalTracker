@@ -1,6 +1,10 @@
 package com.jamgm.CalTracker.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +17,11 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
+@Entity
 public class FoodProduct {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String barcode;
     private String product_name;
     @JsonSetter

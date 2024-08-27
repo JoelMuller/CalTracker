@@ -19,7 +19,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}")
     public UserDTO getUserById(@PathVariable("id") final long id){
-        return UserTransformer.toDto(this.userService.getUserById(id).get());
+        return UserTransformer.toDto(this.userService.getUserById(id));
     }
 
     @PostMapping

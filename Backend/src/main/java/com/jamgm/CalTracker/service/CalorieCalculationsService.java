@@ -31,7 +31,7 @@ public class CalorieCalculationsService {
     }
 
     public double DailyCaloricIntakePerDay(long userId, double weight, double height, int age, boolean male, double activity){
-        User user = userService.getUserById(userId).get(); //method in userService already throws exception if user can't be found
+        User user = userService.getUserById(userId); //method in userService already throws exception if user can't be found
         double basalMetabolicRate = activity != 0 ?
                 BasalMetabolicRateWithActivityLevel(weight, height, age, male, activity) :
                 BasalMetabolicRate(weight, height, age, male);

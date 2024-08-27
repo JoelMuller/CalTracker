@@ -22,9 +22,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(long userId){
+    public User getUserById(long userId){
         if(userRepository.existsById(userId)){
-            return userRepository.findById(userId);
+            return userRepository.findById(userId).get();
         }else{
             throw new RuntimeException("User with id: " + userId + " does not exist");
         }
@@ -40,6 +40,10 @@ public class UserService {
     }
 
     public void deleteUser(long userId){
-        userRepository.deleteById(userId);
+        if(userRepository.existsById(userId)){
+            userRepository.deleteById(userId);
+        }else{
+            throw new RuntimeException("User with id: " + userId + " does not exist");
+        }
     }
 }

@@ -19,10 +19,10 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/foodItem")
-public class FoodItemController {
+public class FoodProductController {
     private final FoodProductService foodProductService;
 
-    public FoodItemController(FoodProductService foodProductService){
+    public FoodProductController(FoodProductService foodProductService){
         this.foodProductService = foodProductService;
     }
 
