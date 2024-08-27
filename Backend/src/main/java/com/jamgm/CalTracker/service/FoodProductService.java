@@ -5,6 +5,7 @@ import com.jamgm.CalTracker.model.FoodProduct;
 import com.jamgm.CalTracker.model.LogFoodProduct;
 import com.jamgm.CalTracker.model.SearchItems;
 import com.jamgm.CalTracker.repository.LogFoodProductRepository;
+import com.jamgm.CalTracker.repository.UserRepository;
 import com.jamgm.CalTracker.web.rest.DTO.LogFoodProductDTO;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -18,12 +19,16 @@ public class FoodProductService {
     //private final FoodItemRepository foodItemRepository;
 
     private final LogFoodProductRepository logFoodProductRepository;
+    private final UserRepository userRepository;
     //Searching and getting specific food items goes via openfoodfactsapi
     private final OpenFoodFactsApiService openFoodFactsApiService;
 
-    public FoodProductService(OpenFoodFactsApiService openFoodFactsApiService, LogFoodProductRepository logFoodProductRepository){
+    public FoodProductService(OpenFoodFactsApiService openFoodFactsApiService,
+                              LogFoodProductRepository logFoodProductRepository,
+                              UserRepository userRepository){
         //this.foodItemRepository = foodItemRepository;
         this.logFoodProductRepository = logFoodProductRepository;
+        this.userRepository = userRepository;
         this.openFoodFactsApiService = openFoodFactsApiService;
     }
 
@@ -36,20 +41,29 @@ public class FoodProductService {
     }
 
     public void logFoodItem(LogFoodProductDTO logFoodProductDTO){
-        Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getBarcode())
-                .map(foodProduct -> {
-                    var lfp = new LogFoodProduct();
-                    lfp.setFoodProductBarcode(foodProduct.getBarcode());
-                    lfp.setDate(logFoodProductDTO.getDate());
-                    return lfp;
-                });
-        this.logFoodProductRepository.save(logFoodProduct.block());
+        if(this.userRepository.existsById(logFoodProductDTO.getUserId())) {
+            Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getBarcode())
+                    .map(foodProduct -> {
+                        var lfp = new LogFoodProduct();
+                        lfp.setFoodProductBarcode(foodProduct.getBarcode());
+                        lfp.setDate(logFoodProductDTO.getDate());
+                        lfp.setUser(this.userRepository.findById(logFoodProductDTO.getUserId()).get());
+                        return lfp;
+                    });
+            this.logFoodProductRepository.save(logFoodProduct.block());
+        }else{
+            throw new RuntimeException("Invalid user id");
+        }
     }
 
-    public Flux<FoodProduct> getFoodItemsByDate(LocalDate date){
-        List<LogFoodProduct> logFoodProducts = logFoodProductRepository.findAllByDate(date);
+    public Flux<FoodProduct> getFoodItemsByDate(LocalDate date, long userId){
+        List<LogFoodProduct> logFoodProducts = logFoodProductRepository.findAllByDateAndUserId(date, userId);
         return Flux.fromIterable(logFoodProducts)
                 .flatMap(logFoodProduct -> openFoodFactsApiService.getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode()));
+    }
 
+    public Mono<Double> getProteinConsumedByDay(Flux<FoodProduct> productFlux){
+        return productFlux.map(product -> product.getNutriments().getProteins100g())
+                .reduce(Double::sum);
     }
 }

@@ -17,5 +17,5 @@ public class LogFoodProductDTO {
     private String barcode;
     @NotNull
     private LocalDate date;
-//    private User user
+    private Long userId;
 }

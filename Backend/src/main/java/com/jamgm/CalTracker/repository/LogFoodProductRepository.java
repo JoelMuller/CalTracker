@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface LogFoodProductRepository extends JpaRepository<LogFoodProduct, Long> {
-    List<LogFoodProduct> findAllByDate(LocalDate date);
+    List<LogFoodProduct> findAllByDateAndUserId(LocalDate date, Long user_id);
 }
