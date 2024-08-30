@@ -5,6 +5,8 @@ import com.jamgm.CalTracker.service.UserService;
 import com.jamgm.CalTracker.web.rest.DTO.UserDTO;
 import com.jamgm.CalTracker.web.rest.transformer.UserTransformer;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -18,24 +20,24 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public UserDTO getUserById(@PathVariable("id") final long id){
-        return UserTransformer.toDto(this.userService.getUserById(id));
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") final long id){
+        return ResponseEntity.ok(this.userService.getUserById(id));
     }
 
     @PostMapping
-    public void createUser(@RequestBody @Valid UserDTO userDTO){
-        this.userService.createUser(UserTransformer.fromDto(userDTO));
+    public ResponseEntity<String> createUser(@RequestBody @Valid UserDTO userDTO){
+        this.userService.createUser(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User " + userDTO.getName() + " created");
     }
 
     @PutMapping
-    public UserDTO updateUser(@RequestBody @Valid UserDTO userDTO){
-        return UserTransformer.toDto(
-                this.userService.updateUser(
-                        UserTransformer.fromDto(userDTO)));
+    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO userDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.updateUser(userDTO));
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteUserById(@PathVariable("id") final long id){
+    public ResponseEntity<Void> deleteUserById(@PathVariable("id") final long id){
         this.userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
