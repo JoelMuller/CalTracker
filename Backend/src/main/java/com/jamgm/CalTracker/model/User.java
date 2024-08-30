@@ -23,15 +23,20 @@ public class User {
     private String password;
     private double weightLossPerWeek; //amount of kg's user wants to lose per week
     @OneToMany
+    @JoinColumn(nullable = true)
     private List<LogFoodProduct> loggedFoodProducts;
+    @OneToMany
+    @JoinColumn(nullable = true)
+    private List<CustomFoodProduct> customFoodProducts;
 
     @Builder
-    public User(long id, String name, String email, String password, double weightLossPerWeek, List<LogFoodProduct> loggedFoodProducts){
+    public User(long id, String name, String email, String password, double weightLossPerWeek, List<LogFoodProduct> loggedFoodProducts, List<CustomFoodProduct> customFoodProducts){
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.weightLossPerWeek = weightLossPerWeek;
         this.loggedFoodProducts = loggedFoodProducts;
+        this.customFoodProducts = customFoodProducts;
     }
 }

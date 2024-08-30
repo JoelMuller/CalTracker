@@ -1,6 +1,7 @@
 package com.jamgm.CalTracker.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,8 +18,9 @@ public class LogFoodProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String FoodProductBarcode;
-    private FoodProduct customFoodProduct;
+    private String foodProductBarcode;
+    @OneToOne(optional = true)
+    private CustomFoodProduct customFoodProduct;
     private LocalDate date;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
