@@ -30,7 +30,7 @@ public class CalculationsController {
         }
     }
 
-    @PostMapping(value = "/calPerDay")
+    @PostMapping(value = "/calories-per-day")
     public ResponseEntity<?> getDailyCaloricIntakePerDay(@RequestBody @Valid BasalMetabolicRateDTO dto){
         if(dto.getUserId() != 0){
             return new ResponseEntity<>(this.calculationsService.DailyCaloricIntakePerDay

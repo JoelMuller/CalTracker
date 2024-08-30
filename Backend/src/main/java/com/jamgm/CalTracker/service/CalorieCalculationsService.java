@@ -1,6 +1,7 @@
 package com.jamgm.CalTracker.service;
 
 import com.jamgm.CalTracker.model.User;
+import com.jamgm.CalTracker.web.rest.DTO.UserDTO;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,7 +32,7 @@ public class CalorieCalculationsService {
     }
 
     public double DailyCaloricIntakePerDay(long userId, double weight, double height, int age, boolean male, double activity){
-        User user = userService.getUserById(userId); //method in userService already throws exception if user can't be found
+        UserDTO user = userService.getUserById(userId); //method in userService already throws exception if user can't be found
         double basalMetabolicRate = activity != 0 ?
                 BasalMetabolicRateWithActivityLevel(weight, height, age, male, activity) :
                 BasalMetabolicRate(weight, height, age, male);
