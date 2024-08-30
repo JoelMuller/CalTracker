@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FoodProductDTO {
-    @Pattern(regexp = "\\d+")
+    @Pattern(regexp = "\\d+", message = "code can only be numbers")
     private String code;
     private ProductDTO product; //Class is needed to handle the json response properly
 }

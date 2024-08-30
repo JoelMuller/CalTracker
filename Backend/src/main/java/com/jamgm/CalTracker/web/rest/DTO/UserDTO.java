@@ -15,11 +15,11 @@ import java.util.List;
 @Builder
 public class UserDTO {
     private long id;
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    @NotNull
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "name can only be numbers and letters")
+    @NotNull(message = "name cannot be null")
     private String name;
     private String email;
-    @NotNull
+    @NotNull(message = "password cannot be null")
     @Size(min = 5, message = "Password too small")
     private String password;
     private double weightLossPerWeek; //amount of kg's user wants to lose per week

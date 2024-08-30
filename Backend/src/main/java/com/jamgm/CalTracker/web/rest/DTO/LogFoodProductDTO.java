@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 public class LogFoodProductDTO {
     @NotNull
-    @Pattern(regexp = "\\d+")
+    @Pattern(regexp = "\\d+", message = "barcode can only be numbers")
     private String barcode;
     @NotNull
     private LocalDate date;
