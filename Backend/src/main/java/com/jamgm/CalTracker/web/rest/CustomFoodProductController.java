@@ -42,7 +42,7 @@ public class CustomFoodProductController {
                 .updateCustomFoodProduct(dto));
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "/{customFoodProductId}")
     public ResponseEntity<Void> deleteCustomFoodProduct(@PathVariable("customFoodProductId")final long id){
         this.customFoodProductService.deleteCustomFoodProduct(id);
         return ResponseEntity.noContent().build();
