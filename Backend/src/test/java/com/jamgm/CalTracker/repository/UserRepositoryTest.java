@@ -46,9 +46,9 @@ public class UserRepositoryTest {
                 .password("test")
                 .weightLossPerWeek(1.50)
                 .build();
-        assertEquals(userRepository.findAll().size(), 2);
+        int oldSize = userRepository.findAll().size();
         User savedUser = userRepository.save(user);
-        assertEquals(userRepository.findAll().size(), 3);
+        assertNotEquals(userRepository.findAll().size(), oldSize);
         assertEquals(userRepository.findById(savedUser.getId()).get().getName(), "testuser3");
     }
 

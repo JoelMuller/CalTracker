@@ -38,7 +38,6 @@ public class CustomFoodProductServiceTest {
     private Nutriments nutriments;
     @BeforeEach
     public void beforeEach(){
-//        MockitoAnnotations.openMocks(this);
         reset(customFoodProductRepository);
 
         user = User.builder()
