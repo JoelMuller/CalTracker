@@ -40,7 +40,7 @@ public class FoodProductController {
     }
 
     @PostMapping(value = "/log", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Logs given food item barcode to the date")
+    @Operation(summary = "Logs given custom food item or barcode for a user")
     public ResponseEntity<Void> logFoodItem(@RequestBody @Valid LogFoodProductDTO logFoodProductDTO){
         this.foodProductService.logFoodItem(logFoodProductDTO);
         return ResponseEntity.noContent().build();

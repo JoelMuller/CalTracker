@@ -61,7 +61,7 @@ public class CustomFoodProductService {
                     .map(CustomFoodProductTransformer::toDto)
                     .toList();
         }else{
-            throw new RuntimeException("User with id " + userId + "does not exist");
+            throw new RuntimeException("User with id " + userId + " does not exist");
 
         }
     }

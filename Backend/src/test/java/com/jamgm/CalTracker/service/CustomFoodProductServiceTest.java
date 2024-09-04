@@ -17,6 +17,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -69,7 +70,7 @@ public class CustomFoodProductServiceTest {
 
         // Initialize CustomFoodProductDTO
         customFoodProductDTO = CustomFoodProductDTO.builder()
-                ._id("1")
+                .id("1")
                 .product_name("Test Product")
                 .serving_size("100g")
                 .userId(1L)
@@ -91,18 +92,20 @@ public class CustomFoodProductServiceTest {
     public void testCreateCustomFoodProduct() {
         try (MockedStatic<CustomFoodProductTransformer> mockedTransformer = mockStatic(CustomFoodProductTransformer.class)) {
             // Setup static mocks
-            mockedTransformer.when(() -> CustomFoodProductTransformer.fromDto(any(CustomFoodProductDTO.class)))
+            mockedTransformer.when(() -> CustomFoodProductTransformer.fromDto(any(CustomFoodProductDTO.class), any(User.class)))
                     .thenReturn(customFoodProduct);
             mockedTransformer.when(() -> CustomFoodProductTransformer.toDto(any(CustomFoodProduct.class)))
                     .thenReturn(customFoodProductDTO);
 
             // Arrange
+            when(userRepository.existsById(anyLong())).thenReturn(true);
+            when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
             when(customFoodProductRepository.save(any(CustomFoodProduct.class))).thenReturn(customFoodProduct);
 
             // Act
             CustomFoodProductDTO result = customFoodProductService.createCustomFoodProduct(customFoodProductDTO);
 
-            mockedTransformer.verify(() -> CustomFoodProductTransformer.fromDto(any(CustomFoodProductDTO.class)));
+            mockedTransformer.verify(() -> CustomFoodProductTransformer.fromDto(any(CustomFoodProductDTO.class), any(User.class)));
             mockedTransformer.verify(() -> CustomFoodProductTransformer.toDto(any(CustomFoodProduct.class)));
             // Assert
             verify(customFoodProductRepository).save(any(CustomFoodProduct.class));
@@ -113,7 +116,9 @@ public class CustomFoodProductServiceTest {
     @Test
     public void testUpdateCustomFoodProduct() {
         // Arrange
-        when(customFoodProductRepository.existsById(1L)).thenReturn(true);
+        when(userRepository.existsById(anyLong())).thenReturn(true);
+        when(customFoodProductRepository.existsById(anyLong())).thenReturn(true);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
         when(customFoodProductRepository.save(any(CustomFoodProduct.class))).thenReturn(customFoodProduct);
         customFoodProductDTO.setProduct_name("Changed");
 
@@ -126,15 +131,12 @@ public class CustomFoodProductServiceTest {
 
     @Test
     public void testUpdateCustomFoodProductNotFound() {
-        // Arrange
-        when(customFoodProductRepository.existsById(1L)).thenReturn(false);
-
         // Act & Assert
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
             customFoodProductService.updateCustomFoodProduct(customFoodProductDTO);
         });
 
-        assertEquals("Food product with id: 1 does not exist", thrown.getMessage());
+        assertEquals("User with id 1 does not exist", thrown.getMessage());
     }
 
     @Test
@@ -180,14 +182,14 @@ public class CustomFoodProductServiceTest {
     @Test
     public void testGetAllCustomFoodProductsByUserNotFound() {
         // Arrange
-        when(userRepository.existsById(1L)).thenReturn(false);
+        when(userRepository.existsById(anyLong())).thenReturn(false);
 
         // Act & Assert
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
             customFoodProductService.getAllCustomFoodProductsByUser(1L);
         });
 
-        assertEquals("No food products found for this user.", thrown.getMessage());
+        assertEquals("User with id 1 does not exist", thrown.getMessage());
     }
 
     @Test
@@ -212,7 +214,7 @@ public class CustomFoodProductServiceTest {
             customFoodProductService.deleteCustomFoodProduct(1L);
         });
 
-        assertEquals("User with id: 1 does not exist", thrown.getMessage());
+        assertEquals("Custom food product with id: 1 does not exist", thrown.getMessage());
     }
 
 }
