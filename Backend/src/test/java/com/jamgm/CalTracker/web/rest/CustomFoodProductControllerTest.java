@@ -41,7 +41,7 @@ public class CustomFoodProductControllerTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         this.customFoodProductDTO = CustomFoodProductDTO.builder()
-                ._id("1")
+                .id("1")
                 .product_name("Custom Product")
                 .serving_size("100g")
                 .build();

@@ -19,7 +19,7 @@ public class LogFoodProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String foodProductBarcode;
-    @OneToOne(optional = true)
+    @ManyToOne(optional = true)
     private CustomFoodProduct customFoodProduct;
     private LocalDate date;
     @ManyToOne
