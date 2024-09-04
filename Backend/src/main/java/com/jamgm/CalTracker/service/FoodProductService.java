@@ -3,6 +3,7 @@ package com.jamgm.CalTracker.service;
 import com.jamgm.CalTracker.model.FoodProduct;
 import com.jamgm.CalTracker.model.LogFoodProduct;
 import com.jamgm.CalTracker.model.SearchItems;
+import com.jamgm.CalTracker.model.User;
 import com.jamgm.CalTracker.repository.LogFoodProductRepository;
 import com.jamgm.CalTracker.repository.UserRepository;
 import com.jamgm.CalTracker.web.rest.DTO.FoodProductDTO;
@@ -58,15 +59,23 @@ public class FoodProductService {
 
     public void logFoodItem(LogFoodProductDTO logFoodProductDTO){
         if(this.userRepository.existsById(logFoodProductDTO.getUserId())) {
-            Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getBarcode())
-                    .map(foodProduct -> {
-                        var lfp = new LogFoodProduct();
-                        lfp.setFoodProductBarcode(foodProduct.getBarcode());
-                        lfp.setDate(logFoodProductDTO.getDate());
-                        lfp.setUser(this.userRepository.findById(logFoodProductDTO.getUserId()).get());
-                        return lfp;
-                    });
-            this.logFoodProductRepository.save(logFoodProduct.block());
+            User user = this.userRepository.findById(logFoodProductDTO.getUserId()).get();
+            if(logFoodProductDTO.getFoodProductBarcode() != null) {
+                Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getFoodProductBarcode())
+                        .map(foodProduct -> LogFoodProduct.builder()
+                                .foodProductBarcode(foodProduct.getBarcode())
+                                .date(logFoodProductDTO.getDate())
+                                .user(user)
+                                .build());
+                this.logFoodProductRepository.save(logFoodProduct.block());
+            }else{
+                LogFoodProduct lfp = LogFoodProduct.builder()
+                        .customFoodProduct(logFoodProductDTO.getCustomFoodProduct())
+                        .date(logFoodProductDTO.getDate())
+                        .user(user)
+                        .build();
+                this.logFoodProductRepository.save(lfp);
+            }
         }else{
             throw new RuntimeException("Invalid user id");
         }

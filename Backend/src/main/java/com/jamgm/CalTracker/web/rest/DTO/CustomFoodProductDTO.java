@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CustomFoodProductDTO {
-    private String _id;
+    private String id;
     private String product_name;
     private String categories;
     private NutrimentsDTO nutriments;

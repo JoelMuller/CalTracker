@@ -1,5 +1,6 @@
 package com.jamgm.CalTracker.web.rest.DTO;
 
+import com.jamgm.CalTracker.model.CustomFoodProduct;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -12,9 +13,10 @@ import java.time.LocalDate;
 @Setter
 @Builder
 public class LogFoodProductDTO {
-    @NotNull
+    private long id;
     @Pattern(regexp = "\\d+", message = "barcode can only be numbers")
-    private String barcode;
+    private String foodProductBarcode;
+    private CustomFoodProduct customFoodProduct;
     @NotNull
     private LocalDate date;
     private Long userId;
