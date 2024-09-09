@@ -19,7 +19,7 @@ public class NutrimentsDTO{
     private Double sugars100g;
     @JsonProperty("fat_100g")
     private Double fat100g;
-    @JsonProperty("saturated-fat_100g")
+    @JsonProperty("saturated-fat_100g") //openfoodfactsapi requirement
     private Double saturatedFat100g;
     @JsonProperty("fiber_100g")
     private Double fiber100g;

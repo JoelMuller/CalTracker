@@ -46,15 +46,15 @@ public class FoodProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/get-items-consumed-by-day/{userId}")
+    @GetMapping(value = "/get-items-consumed-by-day")
     @Operation(summary = "Get all food items consumed by given date")
-    public ResponseEntity<Flux<ProductDTO>> getAllItemsConsumedByDate(@PathVariable("userId") final long userId,
+    public ResponseEntity<Flux<ProductDTO>> getAllItemsConsumedByDate(@RequestParam("userId") final long userId,
                                                        @RequestParam("date") final String date){
         LocalDate givenDate = LocalDate.parse(date);
         return ResponseEntity.ok(this.foodProductService.getFoodItemsByDate(givenDate, userId));
     }
-    @GetMapping(value = "/get-protein-consumed-by-day/{userId}")
-    public ResponseEntity<Mono<Double>> getProteinsConsumedByDay(@PathVariable("userId") final long userId,
+    @GetMapping(value = "/get-protein-consumed-by-day")
+    public ResponseEntity<Mono<Double>> getProteinsConsumedByDay(@RequestParam("userId") final long userId,
                                                  @RequestParam("date") final String date){
         return ResponseEntity.ok(this.foodProductService
                 .getProteinConsumedByDay(this.getAllItemsConsumedByDate(userId,date).getBody()));
