@@ -1,5 +1,6 @@
 package com.jamgm.CalTracker.web.rest;
 
+import com.jamgm.CalTracker.model.LoginRequest;
 import com.jamgm.CalTracker.model.User;
 import com.jamgm.CalTracker.service.UserService;
 import com.jamgm.CalTracker.web.rest.DTO.UserDTO;
@@ -7,6 +8,9 @@ import com.jamgm.CalTracker.web.rest.transformer.UserTransformer;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -14,9 +18,25 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, AuthenticationManager authenticationManager){
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        try{
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(), loginRequest.getPassword())
+            );
+
+            return ResponseEntity.ok("login successful");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid credentials");
+        }
     }
 
     @GetMapping(value = "/{id}")
