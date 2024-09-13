@@ -57,6 +57,11 @@ public class FoodProductService {
                 .reduce(Double::sum);
     }
 
+    public Mono<Double> getCaloriesConsumedByDay(Flux<ProductDTO> productFlux){
+        return productFlux.map(product -> product.getNutriments().getCarbohydrates100g())
+                .reduce(Double::sum);
+    }
+
     public void logFoodItem(LogFoodProductDTO logFoodProductDTO){
         if(this.userRepository.existsById(logFoodProductDTO.getUserId())) {
             User user = this.userRepository.findById(logFoodProductDTO.getUserId()).get();

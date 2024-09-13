@@ -59,4 +59,11 @@ public class FoodProductController {
         return ResponseEntity.ok(this.foodProductService
                 .getProteinConsumedByDay(this.getAllItemsConsumedByDate(userId,date).getBody()));
     }
+
+    @GetMapping(value = "/get-calories-consumed-by-day")
+    public ResponseEntity<Mono<Double>> getCaloriesConsumedByDay(@RequestParam("userId") final long userID,
+                                                                 @RequestParam("date") final String date){
+        return ResponseEntity.ok(this.foodProductService
+                .getCaloriesConsumedByDay(this.getAllItemsConsumedByDate(userID, date).getBody()));
+    }
 }
