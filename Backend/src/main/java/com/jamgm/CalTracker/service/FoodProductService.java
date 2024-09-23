@@ -1,22 +1,22 @@
 package com.jamgm.CalTracker.service;
 
+import com.jamgm.CalTracker.model.CustomFoodProduct;
 import com.jamgm.CalTracker.model.FoodProduct;
 import com.jamgm.CalTracker.model.LogFoodProduct;
-import com.jamgm.CalTracker.model.SearchItems;
 import com.jamgm.CalTracker.model.User;
 import com.jamgm.CalTracker.repository.LogFoodProductRepository;
 import com.jamgm.CalTracker.repository.UserRepository;
-import com.jamgm.CalTracker.web.rest.DTO.FoodProductDTO;
-import com.jamgm.CalTracker.web.rest.DTO.LogFoodProductDTO;
-import com.jamgm.CalTracker.web.rest.DTO.ProductDTO;
-import com.jamgm.CalTracker.web.rest.DTO.SearchItemsDTO;
+import com.jamgm.CalTracker.web.rest.DTO.*;
+import com.jamgm.CalTracker.web.rest.transformer.CustomFoodProductTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.FoodProductTransformer;
+import com.jamgm.CalTracker.web.rest.transformer.LoggedFoodProductsTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.SearchItemsTransformer;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,21 +45,34 @@ public class FoodProductService {
                 .map(SearchItemsTransformer::toDto);
     }
 
-    public Flux<ProductDTO> getFoodItemsByDate(LocalDate date, long userId){
+    public List<LoggedFoodProductDTO> getAllLoggedFoodItemsByDate(LocalDate date, long userId){
         List<LogFoodProduct> logFoodProducts = logFoodProductRepository.findAllByDateAndUserId(date, userId);
-        return Flux.fromIterable(logFoodProducts)
-                .flatMap(logFoodProduct -> openFoodFactsApiService.getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode()))
-                .map(FoodProductTransformer::toDto);
+        List<LoggedFoodProductDTO> allProducts = new ArrayList<>();
+        for(LogFoodProduct logFoodProduct: logFoodProducts){
+            if(logFoodProduct.getFoodProductBarcode() != null){
+                Mono<FoodProduct> foodProduct = openFoodFactsApiService
+                        .getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode());
+                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct.block()));
+            }else{
+                CustomFoodProduct customFoodProduct = logFoodProduct.getCustomFoodProduct();
+                allProducts.add(LoggedFoodProductsTransformer.toDto(customFoodProduct));
+            }
+        }
+        return allProducts;
     }
 
-    public Mono<Double> getProteinConsumedByDay(Flux<ProductDTO> productFlux){
-        return productFlux.map(product -> product.getNutriments().getProteins100g())
-                .reduce(Double::sum);
+    public Double getProteinConsumedByDay(LocalDate date, long userId){
+        return getAllLoggedFoodItemsByDate(date, userId)
+                .stream()
+                .map(product -> product.getNutriments().getProteins100g())
+                .reduce((double) 0, Double::sum);
     }
 
-    public Mono<Double> getCaloriesConsumedByDay(Flux<ProductDTO> productFlux){
-        return productFlux.map(product -> product.getNutriments().getCarbohydrates100g())
-                .reduce(Double::sum);
+    public Double getCaloriesConsumedByDay(LocalDate date, long userId){
+        return getAllLoggedFoodItemsByDate(date, userId)
+                .stream()
+                .map(logFoodProduct -> logFoodProduct.getNutriments().getEnergyKcal100g())
+                .reduce((double) 0, Double::sum);
     }
 
     public void logFoodItem(LogFoodProductDTO logFoodProductDTO){
@@ -75,7 +88,7 @@ public class FoodProductService {
                 this.logFoodProductRepository.save(logFoodProduct.block());
             }else{
                 LogFoodProduct lfp = LogFoodProduct.builder()
-                        .customFoodProduct(logFoodProductDTO.getCustomFoodProduct())
+                        .customFoodProduct(CustomFoodProductTransformer.fromDto(logFoodProductDTO.getCustomFoodProduct(), user))
                         .date(logFoodProductDTO.getDate())
                         .user(user)
                         .build();

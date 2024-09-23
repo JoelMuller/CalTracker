@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/food-item")
@@ -39,31 +40,34 @@ public class FoodProductController {
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping(value = "/log", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/log")
     @Operation(summary = "Logs given custom food item or barcode for a user")
     public ResponseEntity<Void> logFoodItem(@RequestBody @Valid LogFoodProductDTO logFoodProductDTO){
+
         this.foodProductService.logFoodItem(logFoodProductDTO);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/get-items-consumed-by-day")
+    @GetMapping(value = "/get-items-logged-by-day")
     @Operation(summary = "Get all food items consumed by given date")
-    public ResponseEntity<Flux<ProductDTO>> getAllItemsConsumedByDate(@RequestParam("userId") final long userId,
-                                                       @RequestParam("date") final String date){
+    public ResponseEntity<List<LoggedFoodProductDTO>> getAllLoggedFoodItemsConsumedByDate(@RequestParam("userId") final long userId,
+                                                                                @RequestParam("date") final String date){
         LocalDate givenDate = LocalDate.parse(date);
-        return ResponseEntity.ok(this.foodProductService.getFoodItemsByDate(givenDate, userId));
+        return ResponseEntity.ok(this.foodProductService.getAllLoggedFoodItemsByDate(givenDate, userId));
     }
     @GetMapping(value = "/get-protein-consumed-by-day")
-    public ResponseEntity<Mono<Double>> getProteinsConsumedByDay(@RequestParam("userId") final long userId,
+    public ResponseEntity<Double> getProteinsConsumedByDay(@RequestParam("userId") final long userId,
                                                  @RequestParam("date") final String date){
+        LocalDate givenDate = LocalDate.parse(date);
         return ResponseEntity.ok(this.foodProductService
-                .getProteinConsumedByDay(this.getAllItemsConsumedByDate(userId,date).getBody()));
+                .getProteinConsumedByDay(givenDate, userId));
     }
 
     @GetMapping(value = "/get-calories-consumed-by-day")
-    public ResponseEntity<Mono<Double>> getCaloriesConsumedByDay(@RequestParam("userId") final long userID,
+    public ResponseEntity<Double> getCaloriesConsumedByDay(@RequestParam("userId") final long userId,
                                                                  @RequestParam("date") final String date){
+        LocalDate givenDate = LocalDate.parse(date);
         return ResponseEntity.ok(this.foodProductService
-                .getCaloriesConsumedByDay(this.getAllItemsConsumedByDate(userID, date).getBody()));
+                .getCaloriesConsumedByDay(givenDate, userId));
     }
 }
