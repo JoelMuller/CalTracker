@@ -1,5 +1,6 @@
 package com.jamgm.CalTracker.web.rest.DTO;
 
+import com.jamgm.CalTracker.model.CustomFoodProduct;
 import com.jamgm.CalTracker.model.LogFoodProduct;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -22,6 +23,8 @@ public class UserDTO {
     @NotNull(message = "password cannot be null")
     @Size(min = 5, message = "Password too small")
     private String password;
+    private int basalMetabolicRate;
     private double weightLossPerWeek; //amount of kg's user wants to lose per week
     private List<LogFoodProduct> loggedFoodProducts;
+    private List<CustomFoodProduct> customFoodProducts;
 }

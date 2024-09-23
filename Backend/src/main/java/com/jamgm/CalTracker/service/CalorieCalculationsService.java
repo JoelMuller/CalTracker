@@ -23,7 +23,6 @@ public class CalorieCalculationsService {
     public double BasalMetabolicRateWithActivityLevel(double weight, double height, int age, boolean male, double activity){
         //using the Mifflin-St Jeor equation calculates how much calories you burn in a day also accounting for amount
         //of exercise
-        //activity value needs to be sent from the front-end
         if(male){
             return (10 * weight + 6.25 * height - 5 * age + 5) * activity;
         }else{

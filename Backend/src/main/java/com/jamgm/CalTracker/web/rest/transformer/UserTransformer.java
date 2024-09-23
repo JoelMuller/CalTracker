@@ -9,6 +9,7 @@ public class UserTransformer {
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
+                .basalMetabolicRate(user.getBasalMetabolicRate())
                 .weightLossPerWeek(user.getWeightLossPerWeek())
                 .loggedFoodProducts(user.getLoggedFoodProducts())
                 .build();
@@ -20,6 +21,7 @@ public class UserTransformer {
                 .email(dto.getEmail())
                 .name(dto.getName())
                 .password(dto.getPassword())
+                .basalMetabolicRate(dto.getBasalMetabolicRate())
                 .weightLossPerWeek(dto.getWeightLossPerWeek())
                 .loggedFoodProducts(dto.getLoggedFoodProducts())
                 .build();

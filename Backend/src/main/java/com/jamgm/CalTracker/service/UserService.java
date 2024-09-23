@@ -20,8 +20,15 @@ public class UserService {
     }
 
     public UserDTO createUser(UserDTO user){
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new IllegalArgumentException("Email already in use");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return UserTransformer.toDto(userRepository.save(UserTransformer.fromDto(user)));
+    }
+
+    public Boolean checkEmailExists(String email){
+        return userRepository.existsByEmail(email);
     }
 
     public UserDTO getUserById(long userId){
