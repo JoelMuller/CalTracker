@@ -8,10 +8,11 @@ import com.jamgm.CalTracker.web.rest.DTO.NutrimentsDTO;
 
 public class LoggedFoodProductsTransformer {
 
-    public static LoggedFoodProductDTO toDto(FoodProduct foodProduct){
+    public static LoggedFoodProductDTO toDto(FoodProduct foodProduct, long logId){
         Nutriments nutriments = foodProduct.getNutriments();
 
         return LoggedFoodProductDTO.builder()
+                .id(logId)
                 .product_name(foodProduct.getProduct_name())
                 .serving_size(foodProduct.getServing_size())
                 .categories(foodProduct.getCategories().toString())
@@ -28,10 +29,11 @@ public class LoggedFoodProductsTransformer {
                 .build();
     }
 
-    public static LoggedFoodProductDTO toDto(CustomFoodProduct customFoodProduct){
+    public static LoggedFoodProductDTO toDto(CustomFoodProduct customFoodProduct, long logId){
         Nutriments nutriments = customFoodProduct.getNutriments();
 
         return LoggedFoodProductDTO.builder()
+                .id(logId)
                 .product_name(customFoodProduct.getProduct_name())
                 .serving_size(customFoodProduct.getServing_size())
                 .nutriments(NutrimentsDTO.builder()

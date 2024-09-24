@@ -18,6 +18,7 @@ public class LogFoodProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String productName;
     private String foodProductBarcode;
     @ManyToOne(optional = true)
     private CustomFoodProduct customFoodProduct;
