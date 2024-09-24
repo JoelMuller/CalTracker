@@ -1,0 +1,17 @@
+<form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="space-y-4">
+    <div class="form-group">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="text" id="email" [(ngModel)]="email" name="email" placeholder="john@doe.com"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+
+        <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+    </div>
+    <div class="form-group">
+        <button type="submit"
+        class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Inloggen
+      </button>
+    </div>
+</form>
