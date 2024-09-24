@@ -1,0 +1,213 @@
+<div class="flex flex-col lg:flex-row md:flex-col">
+    <div class="basis-1/2 px-5">
+        <!-- on the left side of the page -->
+        <div class="mb-5">
+            <h2 class="font-semibold text-xl border-b-2 mb-2 border-gray-300">Voeg eigen product toe</h2>
+            <!-- form to create custom food product -->
+            <form (ngSubmit)="createAndLogNewCustomFoodProduct()" #userForm="ngForm" class="space-y-4">
+                <!-- Naam -->
+                <div class="flex space-x-4">
+                    <div class="w-1/3">
+                        <label for="productName" class="block text-sm font-medium text-gray-700">Product naam*:</label>
+                        <input type="text" id="productName" [(ngModel)]="newCustomFoodProduct.productName"
+                            name="productName" placeholder="Caesarsalade" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+                                   ng-touched ng-invalid:border-red-500" #productName="ngModel" />
+                        <div *ngIf="productName.invalid && productName.touched" class="text-red-500">
+                            Product name is required.
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <label for="servingSize" class="block text-sm font-medium text-gray-700">Portie grootte in
+                            gram*:</label>
+                        <input type="text" id="servingSize" [(ngModel)]="newCustomFoodProduct.servingSize"
+                            name="servingSize" placeholder="100g" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+                                   ng-touched ng-invalid:border-red-500" #servingSize="ngModel" />
+                        <div *ngIf="servingSize.invalid && servingSize.touched" class="text-red-500">
+                            Serving size is required.
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <label for="logDate" class="block text-sm font-medium text-gray-700">Datum:</label>
+                        <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
+                            class="mt-1 block w-full px-3 py-2 border  border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+
+                <!-- Nutriments -->
+                <h2 class="font-semibold text-lg">Voedingsstoffen, probeer zoveel mogelijk in te vullen</h2>
+
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="energyKcal100g" class="block text-sm font-medium text-gray-700">Energy/kcal per
+                            100g</label>
+                        <input type="number" id="energyKcal100g" [(ngModel)]="newNutriments.energyKcal100g"
+                            name="energyKcal100g" step="0.1" placeholder="0.5" required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                    <div class="w-1/2">
+                        <label for="proteins100g" class="block text-sm font-medium text-gray-700">Proteïne/eiwitten per
+                            100g</label>
+                        <input type="number" id="proteins100g" [(ngModel)]="newNutriments.proteins100g"
+                            name="proteins100g" step="0.1" placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="carbohydrates100g" class="block text-sm font-medium text-gray-700">Koolhydraten per
+                            100g</label>
+                        <input type="number" id="carbohydrates100g" [(ngModel)]="newNutriments.carbohydrates100g"
+                            name="carbohydrates100g" step="0.1" placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                    <div class="w-1/2">
+                        <label for="sugars100g" class="block text-sm font-medium text-gray-700">Suikers per 100g</label>
+                        <input type="number" id="sugars100g" [(ngModel)]="newNutriments.sugars100g" name="sugars100g"
+                            step="0.1" placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="fat100g" class="block text-sm font-medium text-gray-700">Vet per 100g</label>
+                        <input type="number" id="fat100g" [(ngModel)]="newNutriments.fat100g" name="fat100g" step="0.1"
+                            placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                    <div class="w-1/2">
+                        <label for="saturatedFat100g" class="block text-sm font-medium text-gray-700">Verzadigd vet per
+                            100g</label>
+                        <input type="number" id="saturatedFat100g" [(ngModel)]="newNutriments.saturatedFat100g"
+                            name="saturatedFat100g" step="0.1" placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="fiber100g" class="block text-sm font-medium text-gray-700">Vezels per 100g</label>
+                        <input type="number" id="fiber100g" [(ngModel)]="newNutriments.fiber100g" name="fiber100g"
+                            step="0.1" placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                    <div class="w-1/2">
+                        <label for="sodium100g" class="block text-sm font-medium text-gray-700">Natrium per 100g</label>
+                        <input type="number" id="sodium100g" [(ngModel)]="newNutriments.sodium100g" name="sodium100g"
+                            step="0.1" placeholder="0.5"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" [disabled]="userForm.invalid" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                               disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        Eigen product toevoegen en loggen
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="container mx-auto py-4">
+            <h2 class="font-semibold text-xl mb-4 border-b-2 border-gray-300">Eigen eet items</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 overflow-y-auto max-h-[23rem]">
+                <div *ngFor="let foodProduct of usersCustomFoodProducts"
+                    class="p-4 bg-white border rounded-md shadow-md space-y-4">
+                    <ul>
+                        <li class="font-bold">Product naam: {{foodProduct.productName}}</li>
+                        <li>Portiegrootte: {{foodProduct.servingSize}}</li>
+                        <li>Voedingsstoffen:</li>
+                        <li>
+                            <ul class="list-disc list-inside space-y-0">
+                                <li>Energie: {{foodProduct.nutriments.energyKcal100g}}</li>
+                                <li>Proteïne: {{foodProduct.nutriments.proteins100g}}</li>
+                                <li>Koolhydraten: {{foodProduct.nutriments.carbohydrates100g}}</li>
+                                <li>Suikers: {{foodProduct.nutriments.sugars100g}}</li>
+                                <li>Vet: {{foodProduct.nutriments.fat100g}}</li>
+                                <li>Verzadigd vet: {{foodProduct.nutriments.saturatedFat100g}}</li>
+                                <li>Vezels: {{foodProduct.nutriments.fiber100g}}</li>
+                                <li>Natrium: {{foodProduct.nutriments.sodium100g}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button (click)="logCustomFoodProductById(foodProduct.id)"
+                        class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-auto">
+                        Log dit product
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="basis-1/2">
+        <!-- on the right side of the page -->
+        <div class="flex-row mb-5">
+            <div class="w-full mb-7">
+                <h2 class="font-semibold text-xl border-b-2 mb-2 border-gray-300">Zoeken naar product</h2>
+            </div>
+
+            <div class="w-full flex items-center space-x-2">
+                <div class="relative flex-grow">
+                    <!-- https://tailwindcss.com/docs/animation add spin when loading -->
+                    <input type="text" id="searchTerms" name="searchTerms" [(ngModel)]="searchTerms"
+                        (keyup.enter)="searchFoodProducts(1)"
+                        class="mt-1 block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Search..." />
+
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                        <i class="fa fa-search text-gray-500 cursor-pointer" (click)="searchFoodProducts(1)"></i>
+                    </div>
+                </div>
+
+                <button [disabled]="searchTerms == ''" (click)="searchFoodProducts(1)" class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 
+                bg-indigo-600 hover:bg-indigo-700 text-white disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    Zoek
+                </button>
+
+            </div>
+        </div>
+
+        <div class="container mx-auto py-4">
+            <h2 class="font-semibold text-xl mb-4 border-b-2 border-gray-300">Zoek resultaten</h2>
+
+            <div *ngIf="searched"
+                class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto max-h-[44rem]">
+                <div *ngFor="let item of searchResults?.products"
+                    class="p-4 bg-white border rounded-md shadow-md flex flex-col space-y-4">
+                    <ul class="flex-grow">
+                        <li class="font-bold">Product naam: {{item.productName}}</li>
+                        <li>Categorieën: {{item.categories}}</li>
+                        <li>Portiegrootte: {{item.servingSize}}</li>
+                        <li>Voedingsstoffen:</li>
+                        <li>
+                            <ul class="list-disc list-inside space-y-0">
+                                <li>Energie: {{item.nutriments.energyKcal100g}}</li>
+                                <li>Proteïne: {{item.nutriments.proteins100g}}</li>
+                                <li>Koolhydraten: {{item.nutriments.carbohydrates100g}}</li>
+                                <li>Suikers: {{item.nutriments.sugars100g}}</li>
+                                <li>Vet: {{item.nutriments.fat100g}}</li>
+                                <li>Verzadigd vet: {{item.nutriments.saturatedFat100g}}</li>
+                                <li>Vezels: {{item.nutriments.fiber100g}}</li>
+                                <li>Natrium: {{item.nutriments.sodium100g}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button (click)="logFoodProductByBarcode(item.id)"
+                        class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-auto">
+                        Log dit product
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="searched" class="flex justify-between mt-4">
+                <button [disabled]="currentPage == 1" (click)="searchFoodProducts(currentPage - 1)"
+                    class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Vorige
+                </button>
+                <span>Page: {{currentPage}}</span>
+                <button [disabled]="currentPage >= totalPages" (click)="searchFoodProducts(currentPage + 1)"
+                    class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Volgende
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
