@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, map, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { error } from 'console';
 import { response } from 'express';
@@ -14,12 +14,48 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  createUser(user: User): Observable<User> {
-    return this.http.post<User>(this.apiRoute, {
+  login(email: string, password: string) {
+    return this.http.post<any>(`${this.apiRoute}/login`, {
+      "email": email,
+      "password": password
+    },
+      {
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json'
+        }
+      })
+      .pipe(tap(response => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('userId', response.userId);
+      }));
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    console.log("logged out")
+  }
+
+  getUserId(): number {
+    return parseInt(localStorage.getItem('userId') || '0');
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token')
+  }
+
+  checkEmailExists(email: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiRoute}/check-email/${email}`);
+  }
+
+  createUser(user: User, bmrInfo: any): Observable<string> {
+    return this.http.post<string>(`${this.apiRoute}/register`, {
       "name": user.name,
       "email": user.email,
       "password": user.password,
-      "weightLossPerWeek": user.weightLossPerWeek
+      "basalMetabolicRate": user.basalMetabolicRate,
+      "weightLossPerWeek": user.weightLossPerWeek,
     });
   }
 
@@ -31,6 +67,7 @@ export class UserService {
           name: response.name,
           email: response.email,
           password: response.password,
+          basalMetabolicRate: response.basalMetabolicRate,
           weightLossPerWeek: response.weightLossPerWeek,
           loggedFoodProducts: response.loggedFoodProducts
         }))
@@ -43,6 +80,7 @@ export class UserService {
       "name": user.name,
       "email": user.email,
       "password": user.password,
+      "basalMetabolicRate": user.basalMetabolicRate,
       "weightLossPerWeek": user.weightLossPerWeek
     });
   }

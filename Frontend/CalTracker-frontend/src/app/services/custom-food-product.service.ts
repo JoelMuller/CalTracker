@@ -15,7 +15,6 @@ export class CustomFoodProductService {
   createCustomFoodProduct(customFoodProduct: CustomFoodProduct): Observable<CustomFoodProduct> {
     return this.http.post<CustomFoodProduct>(this.apiRoute, {
       "product_name": customFoodProduct.productName,
-      "categories": customFoodProduct.categories?.join(','),
       "nutriments": {
         "energy-kcal_100g": customFoodProduct.nutriments.energyKcal100g,
         "proteins_100g": customFoodProduct.nutriments.proteins100g,
@@ -55,7 +54,17 @@ export class CustomFoodProductService {
             categories: customFoodProduct.categories,
             servingSize: customFoodProduct.serving_size,
             userId: customFoodProduct.userId,
-            nutriments: customFoodProduct.nutriments
+            nutriments: {
+              id: customFoodProduct.nutriments.id,
+              energyKcal100g: customFoodProduct.nutriments['energy-kcal_100g'],
+              proteins100g: customFoodProduct.nutriments['proteins_100g'],
+              carbohydrates100g: customFoodProduct.nutriments['carbohydrates_100g'] ?? 0,
+              sugars100g: customFoodProduct.nutriments['sugars_100g'],
+              fat100g: customFoodProduct.nutriments['fat_100g'],
+              saturatedFat100g: customFoodProduct.nutriments['saturated-fat_100g'],
+              fiber100g: customFoodProduct.nutriments['fiber_100g'],
+              sodium100g: customFoodProduct.nutriments['sodium_100g']
+            }
           }))
         )
       )
@@ -65,7 +74,6 @@ export class CustomFoodProductService {
     return this.http.put<CustomFoodProduct>(`${this.apiRoute}`, {
       "id": customFoodProduct.id,
       "product_name": customFoodProduct.productName,
-      "categories": customFoodProduct.categories,
       "nutriments": {
         "energy-kcal_100g": customFoodProduct.nutriments.energyKcal100g,
         "proteins_100g": customFoodProduct.nutriments.proteins100g,
