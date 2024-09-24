@@ -48,6 +48,13 @@ public class FoodProductController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping(value = "/log/{id}")
+    @Operation(summary = "Deletes the log of given id")
+    public ResponseEntity<Void> deleteLoggedFoodItem(@PathVariable("id") final long logId){
+        this.foodProductService.deleteLoggedFoodItem(logId);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/get-items-logged-by-day")
     @Operation(summary = "Get all food items consumed by given date")
     public ResponseEntity<List<LoggedFoodProductDTO>> getAllLoggedFoodItemsConsumedByDate(@RequestParam("userId") final long userId,

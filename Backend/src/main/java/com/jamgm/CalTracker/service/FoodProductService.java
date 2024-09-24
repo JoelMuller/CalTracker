@@ -52,10 +52,10 @@ public class FoodProductService {
             if(logFoodProduct.getFoodProductBarcode() != null){
                 Mono<FoodProduct> foodProduct = openFoodFactsApiService
                         .getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode());
-                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct.block()));
+                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct.block(), logFoodProduct.getId()));
             }else{
                 CustomFoodProduct customFoodProduct = logFoodProduct.getCustomFoodProduct();
-                allProducts.add(LoggedFoodProductsTransformer.toDto(customFoodProduct));
+                allProducts.add(LoggedFoodProductsTransformer.toDto(customFoodProduct, logFoodProduct.getId()));
             }
         }
         return allProducts;
@@ -82,6 +82,7 @@ public class FoodProductService {
                 Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getFoodProductBarcode())
                         .map(foodProduct -> LogFoodProduct.builder()
                                 .foodProductBarcode(foodProduct.getBarcode())
+                                .productName(foodProduct.getProduct_name())
                                 .date(logFoodProductDTO.getDate())
                                 .user(user)
                                 .build());
@@ -89,6 +90,7 @@ public class FoodProductService {
             }else{
                 LogFoodProduct lfp = LogFoodProduct.builder()
                         .customFoodProduct(CustomFoodProductTransformer.fromDto(logFoodProductDTO.getCustomFoodProduct(), user))
+                        .productName(logFoodProductDTO.getCustomFoodProduct().getProduct_name())
                         .date(logFoodProductDTO.getDate())
                         .user(user)
                         .build();
@@ -97,5 +99,8 @@ public class FoodProductService {
         }else{
             throw new RuntimeException("Invalid user id");
         }
+    }
+    public void deleteLoggedFoodItem(long logId){
+        this.logFoodProductRepository.deleteById(logId);
     }
 }
