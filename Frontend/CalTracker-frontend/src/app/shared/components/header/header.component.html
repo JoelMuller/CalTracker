@@ -1,19 +1,19 @@
-<div class="flex items-center justify-between h-16 w-full py-2 bg-gray-400">
+<div class="flex items-center justify-between h-16 w-full py-2 bg-dark-green">
     <div class="ml-4">
-        <h1 class="text-lg font-bold">CalTracker</h1>
+        <h1 class="text-lg font-bold text-white">CalTracker</h1>
     </div>
     <div class="flex space-x-4 mr-4">
         <a *ngIf="loggedIn"
-            class="block text-white font-semibold py-2 px-4 rounded-md hover:underline focus:outline-none"
+            class="block text-white font-semibold py-2 px-4 rounded-md hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green"
             routerLink="/dashboard">Dashboard</a>
         <a *ngIf="loggedIn"
-            class="block bg-gray-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mx-5 cursor-pointer"
-            (click)="logout()">Logout</a>
+            class="block bg-gray-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-beige hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green mx-5 cursor-pointer"
+            routerLink="" (click)="logout()">Logout</a>
         <a *ngIf="!loggedIn"
-            class="block bg-gray-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
+            class="block bg-gray-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-beige hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green cursor-pointer"
             routerLink="/register">Registreren</a>
         <a *ngIf="!loggedIn"
-            class="block bg-gray-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
+            class="block bg-gray-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-beige hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green cursor-pointer"
             routerLink="/login">Login</a>
     </div>
 </div>

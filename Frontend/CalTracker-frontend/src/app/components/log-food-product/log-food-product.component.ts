@@ -31,8 +31,11 @@ export class LogFoodProductComponent {
   searchResults?: SearchResults;
   searched = false;
   totalSearchItems = 0;
-  totalPages = 1;
+  totalPages = 2;
   currentPage = 1;
+
+  //loading circle
+  loading = false;
 
   constructor(private customFoodProductService: CustomFoodProductService,
     private foodProductService: FoodProductService,
@@ -69,7 +72,9 @@ export class LogFoodProductComponent {
         next: (response) =>
           console.log("logged food product"),
         error: (e) =>
-          console.log("Error logging food product", e)
+          console.log("Error logging food product", e),
+        complete: () =>
+          this.router.navigate(['/dashboard'])
       })
   }
 
@@ -95,7 +100,7 @@ export class LogFoodProductComponent {
             this.logCustomFoodProduct(response),
           error: (e) =>
             console.log("Error getting custom food product by id", e),
-          complete: () => 
+          complete: () =>
             this.router.navigate(['/dashboard'])
         })
     }
@@ -112,18 +117,22 @@ export class LogFoodProductComponent {
   }
 
   searchFoodProducts(page: number) {
-    console.log("in method")
-    console.log("page number", page)
-    this.foodProductService.searchFoodItems(this.searchTerms, page).subscribe({
-      next: (response) => {
-        this.searchResults = response;
-        this.totalSearchItems = response.count;
-        this.currentPage = response.page;
-        this.searched = true;
-        this.totalPages = Math.ceil(this.totalSearchItems / 10)
-      },
-      error: (e) =>
-        console.log("error getting search results", e)
-    })
+    //how to check if disabled button condition is also allowed here
+    if (page != 0 && this.totalPages > page) {
+      this.loading = true;
+      this.foodProductService.searchFoodItems(this.searchTerms, page).subscribe({
+        next: (response) => {
+          this.searchResults = response;
+          this.totalSearchItems = response.count;
+          this.currentPage = response.page;
+          this.searched = true;
+          this.totalPages = Math.ceil(this.totalSearchItems / 10)
+        },
+        error: (e) =>
+          console.log("error getting search results", e),
+        complete: () => 
+          this.loading = false
+      })
+    }
   }
 }

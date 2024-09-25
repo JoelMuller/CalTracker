@@ -1,92 +1,108 @@
-<div class="container mx-auto p-4">
-  <h1 class="text-xl font-semibold mb-4">Aanmaken gebruiker</h1>
+<div class="container mx-auto">
+  <h2 class="text-xl font-semibold border-b-4 mb-2 border-vibrant-green">Registreren</h2>
   <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="space-y-4">
-    <!-- Naam -->
-    <div class="form-group">
-      <label for="name" class="block text-sm font-medium text-gray-700">Naam</label>
-      <input type="text" id="name" [(ngModel)]="newUser.name" name="name" placeholder="John doe"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+    <div class="flex flex-col md:flex-row md:space-x-4">
+      <!-- Naam -->
+      <div class="w-full">
+        <label for="name" class="block text-sm font-medium text-gray-700">Naam</label>
+        <input type="text" id="name" [(ngModel)]="newUser.name" name="name" placeholder="John doe"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+      </div>
+
+      <!-- Email -->
+      <div class="w-full">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" id="email" [(ngModel)]="newUser.email" name="email" placeholder="johndoe@gmail.com"
+          (change)="checkEmail()"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+        <!-- Display a warning if the email is already in use -->
+        <div *ngIf="emailInUse" class="text-red-600 mt-1">Email is already in use</div>
+      </div>
     </div>
 
-    <!-- Email -->
-    <div class="form-group">
-      <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-      <input type="email" id="email" [(ngModel)]="newUser.email" name="email" placeholder="johndoe@gmail.com"
-        (change)="checkEmail()"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-      <!-- Display a warning if the email is already in use -->
-      <div *ngIf="emailInUse" class="text-red-600 mt-1">Email is already in use</div>
-    </div>
+    <div class="flex flex-col md:flex-row md:space-x-4">
+      <!-- Password -->
+      <div class="w-full">
+        <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord</label>
+        <input type="password" id="password" [(ngModel)]="newUser.password" name="password" required
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+      </div>
 
-    <!-- Password -->
-    <div class="form-group">
-      <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord</label>
-      <input type="password" id="password" [(ngModel)]="newUser.password" name="password" required
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-    </div>
-
-    <!-- Weight Loss Per Week -->
-    <div class="form-group">
-      <label for="weightLossPerWeek" class="block text-sm font-medium text-gray-700">Gewichtsverlies per week
-        (kg)</label>
-      <input type="number" id="weightLossPerWeek" [(ngModel)]="newUser.weightLossPerWeek" name="weightLossPerWeek"
-        step="0.1" placeholder="0.5"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+      <!-- Weight Loss Per Week -->
+      <div class="w-full">
+        <label for="weightLossPerWeek" class="block text-sm font-medium text-gray-700">Gewichtsverlies per week
+          (kg)</label>
+        <input type="number" id="weightLossPerWeek" [(ngModel)]="newUser.weightLossPerWeek" name="weightLossPerWeek"
+          step="0.1" placeholder="0.5"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+      </div>
     </div>
 
     <!-- Calculate basal metabolic rate -->
-    <div class="form-group">
-      <h3>Basaal metabolisme berekenen</h3>
-      <label for="weight" class="block text-sm font-medium text-gray-700">Gewicht in kg</label>
-      <input type="number" id="weight" [(ngModel)]="bmrInfo.weight" name="weight" placeholder="80"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+    <h3 class="font-semibold border-b-4 mb-2 border-vibrant-green">Basaal metabolisme berekenen</h3>
+    <div class="flex flex-col md:flex-row md:space-x-4">
+      <div class="w-full">
+        <label for="weight" class="block text-sm font-medium text-gray-700">Gewicht in kg</label>
+        <input type="number" id="weight" [(ngModel)]="bmrInfo.weight" name="weight" placeholder="80"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+      </div>
+      <div class="w-full">
+        <label for="height" class="block text-sm font-medium text-gray-700">Lengte in cm</label>
+        <input type="number" id="height" [(ngModel)]="bmrInfo.height" name="height" placeholder="180"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+      </div>
+      <div class="w-full">
+        <label for="age" class="block text-sm font-medium text-gray-700">Leeftijd</label>
+        <input type="number" id="age" [(ngModel)]="bmrInfo.age" name="age" placeholder="21"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm" />
+      </div>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center md:space-x-2">
+        <span>Gender:</span>
+        <label for="male" class="flex items-center space-x-1 text-sm font-medium text-gray-700">
+          <input type="radio" id="male" [(ngModel)]="bmrInfo.gender" name="gender" [value]="true"
+            class="h-4 w-4 accent-green" />
+          <span>Man</span>
+        </label>
+        <label for="female" class="flex items-center space-x-1 text-sm font-medium text-gray-700">
+          <input type="radio" id="female" [(ngModel)]="bmrInfo.gender" name="gender" [value]="false"
+            class="h-4 w-4 accent-green" />
+          <span>Vrouw</span>
+        </label>
+      </div>
 
-      <label for="height" class="block text-sm font-medium text-gray-700">Lengte in cm</label>
-      <input type="number" id="height" [(ngModel)]="bmrInfo.height" name="height" placeholder="180"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+      <div class="flex flex-col space-y-2">
+        <span class="text-sm font-medium text-gray-700 border-b-2 border-vibrant-green">Activiteits niveau</span>
 
-      <label for="age" class="block text-sm font-medium text-gray-700">Leeftijd</label>
-      <input type="number" id="age" [(ngModel)]="bmrInfo.age" name="age" placeholder="21"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-
-      <label for="male" class="block text-sm font-medium text-gray-700">Man</label>
-      <input type="radio" id="gender" [(ngModel)]="bmrInfo.gender" name="gender" [value]="true"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-      <label for="female" class="block text-sm font-medium text-gray-700">Vrouw</label>
-      <input type="radio" id="gender" [(ngModel)]="bmrInfo.gender" name="gender" [value]="false"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-
-      <label class="block text-sm font-medium text-gray-700">Activiteits niveau</label>
-
-      <div class="mt-1">
-        <label for="activity1" class="block text-sm font-medium text-gray-700">
+        <label for="activity1" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity1" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.2"
-            class="mr-2 rounded-md border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 sm:text-sm" />
-          Weinig tot geen lichaamsbeweging zoals mensen met een kantoorbaan
+            class="h-4 w-4 accent-green" />
+          <span>Weinig tot geen lichaamsbeweging zoals mensen met een kantoorbaan</span>
         </label>
 
-        <label for="activity2" class="block text-sm font-medium text-gray-700">
+        <label for="activity2" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity2" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.375"
-            class="mr-2 rounded-md border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 sm:text-sm" />
-          Licht actief, 1 tot 3 keer per week sporten
+            class="h-4 w-4 accent-green" />
+          <span>Licht actief, 1 tot 3 keer per week sporten</span>
         </label>
 
-        <label for="activity3" class="block text-sm font-medium text-gray-700">
+        <label for="activity3" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity3" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.55"
-            class="mr-2 rounded-md border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 sm:text-sm" />
-          Matig actief, 3 tot 5 keer per week sporten
+            class="h-4 w-4 accent-green" />
+          <span>Matig actief, 3 tot 5 keer per week sporten</span>
         </label>
 
-        <label for="activity4" class="block text-sm font-medium text-gray-700">
+        <label for="activity4" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity4" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.725"
-            class="mr-2 rounded-md border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 sm:text-sm" />
-          Zeer actief, regelmatig sporten of op meeste dagen intensief bewegen
+            class="h-4 w-4 accent-green" />
+          <span>Zeer actief, regelmatig sporten of op meeste dagen intensief bewegen</span>
         </label>
 
-        <label for="activity5" class="block text-sm font-medium text-gray-700">
+        <label for="activity5" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity5" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.9"
-            class="mr-2 rounded-md border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 sm:text-sm" />
-          Extra actief, intensieve training 6 tot 7 dagen per week en fysiek werk
+            class="h-4 w-4 accent-green" />
+          <span>Extra actief, intensieve training 6 tot 7 dagen per week en fysiek werk</span>
         </label>
       </div>
     </div>
@@ -94,7 +110,7 @@
     <!-- Submit Button -->
     <div class="form-group">
       <button type="submit"
-        class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-green">
         Gebruiker Aanmaken
       </button>
     </div>

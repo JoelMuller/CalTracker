@@ -110,15 +110,20 @@ export class DashboardComponent {
       annotations: {
         yaxis: [{
           y: this.bmr,
-          borderColor: '#00E396',
+          borderColor: '#80AF81',
+          fillColor: '#80AF81',
+          opacity: 1,
+          strokeDashArray: 8,
+          offsetY: 0,
           label: {
-            borderColor: '#00E396',
+            borderColor: '#739072',
             style: {
-              fontSize: '0.85rem',
+              fontSize: '15px',
               color: '#fff',
-              background: '#00E396',
+              background: '#739072',
               padding:{
                 top: 5,
+                left: 5
               }
             },
             text: 'Max calorieën per dag: ' + this.bmr
@@ -171,7 +176,9 @@ export class DashboardComponent {
       next: (response) => 
         this.getFoodItemsConsumedByWeek(this.userService.getUserId(), this.weekStart),
       error: (e) => 
-        console.log("error deleting log", e)
+        console.log("error deleting log", e),
+      complete: () =>
+        this.updateChartData(this.userService.getUserId(), this.weekStart)
     })
   }
 
