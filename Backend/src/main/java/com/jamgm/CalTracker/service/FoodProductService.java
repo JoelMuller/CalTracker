@@ -52,10 +52,12 @@ public class FoodProductService {
             if(logFoodProduct.getFoodProductBarcode() != null){
                 Mono<FoodProduct> foodProduct = openFoodFactsApiService
                         .getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode());
-                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct.block(), logFoodProduct.getId()));
+                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct.block(), logFoodProduct.getId(),
+                        logFoodProduct.getGramsConsumed()));
             }else{
                 CustomFoodProduct customFoodProduct = logFoodProduct.getCustomFoodProduct();
-                allProducts.add(LoggedFoodProductsTransformer.toDto(customFoodProduct, logFoodProduct.getId()));
+                allProducts.add(LoggedFoodProductsTransformer.toDto(customFoodProduct, logFoodProduct.getId(),
+                        logFoodProduct.getGramsConsumed()));
             }
         }
         return allProducts;
@@ -64,14 +66,20 @@ public class FoodProductService {
     public Double getProteinConsumedByDay(LocalDate date, long userId){
         return getAllLoggedFoodItemsByDate(date, userId)
                 .stream()
-                .map(product -> product.getNutriments().getProteins100g())
+                .map(product -> {
+                    double proteins = product.getNutriments().getProteins100g();
+                    return product.getGramsConsumed() / 100 * proteins;
+                })
                 .reduce((double) 0, Double::sum);
     }
 
     public Double getCaloriesConsumedByDay(LocalDate date, long userId){
         return getAllLoggedFoodItemsByDate(date, userId)
                 .stream()
-                .map(logFoodProduct -> logFoodProduct.getNutriments().getEnergyKcal100g())
+                .map(logFoodProduct -> {
+                    double kcal = logFoodProduct.getNutriments().getEnergyKcal100g();
+                    return logFoodProduct.getGramsConsumed() / 100 * kcal;
+                })
                 .reduce((double) 0, Double::sum);
     }
 
@@ -81,6 +89,7 @@ public class FoodProductService {
             if(logFoodProductDTO.getFoodProductBarcode() != null) {
                 Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getFoodProductBarcode())
                         .map(foodProduct -> LogFoodProduct.builder()
+                                .gramsConsumed(logFoodProductDTO.getGramsConsumed())
                                 .foodProductBarcode(foodProduct.getBarcode())
                                 .productName(foodProduct.getProduct_name())
                                 .date(logFoodProductDTO.getDate())
@@ -89,6 +98,7 @@ public class FoodProductService {
                 this.logFoodProductRepository.save(logFoodProduct.block());
             }else{
                 LogFoodProduct lfp = LogFoodProduct.builder()
+                        .gramsConsumed(logFoodProductDTO.getGramsConsumed())
                         .customFoodProduct(CustomFoodProductTransformer.fromDto(logFoodProductDTO.getCustomFoodProduct(), user))
                         .productName(logFoodProductDTO.getCustomFoodProduct().getProduct_name())
                         .date(logFoodProductDTO.getDate())

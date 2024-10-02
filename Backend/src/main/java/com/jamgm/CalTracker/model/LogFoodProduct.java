@@ -1,6 +1,7 @@
 package com.jamgm.CalTracker.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -19,6 +20,8 @@ public class LogFoodProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String productName;
+    @NotNull
+    private Double gramsConsumed;
     private String foodProductBarcode;
     @ManyToOne(optional = true)
     private CustomFoodProduct customFoodProduct;

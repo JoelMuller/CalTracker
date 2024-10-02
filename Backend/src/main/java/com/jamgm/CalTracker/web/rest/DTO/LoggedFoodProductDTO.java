@@ -10,6 +10,7 @@ import lombok.Setter;
 public class LoggedFoodProductDTO {
     private long id;
     private String product_name;
+    private Double gramsConsumed;
     private String categories;
     private NutrimentsDTO nutriments;
     private String serving_size;

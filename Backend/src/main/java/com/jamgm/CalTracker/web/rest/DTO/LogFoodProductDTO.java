@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @Builder
 public class LogFoodProductDTO {
     private long id;
+    private Double gramsConsumed;
     @Pattern(regexp = "\\d+", message = "barcode can only be numbers")
     private String foodProductBarcode;
     private CustomFoodProductDTO customFoodProduct;

@@ -8,14 +8,15 @@ import com.jamgm.CalTracker.web.rest.DTO.NutrimentsDTO;
 
 public class LoggedFoodProductsTransformer {
 
-    public static LoggedFoodProductDTO toDto(FoodProduct foodProduct, long logId){
+    public static LoggedFoodProductDTO toDto(FoodProduct foodProduct, long logId, double gramsConsumed){
         Nutriments nutriments = foodProduct.getNutriments();
 
         return LoggedFoodProductDTO.builder()
                 .id(logId)
                 .product_name(foodProduct.getProduct_name())
                 .serving_size(foodProduct.getServing_size())
-                .categories(foodProduct.getCategories().toString())
+                .gramsConsumed(gramsConsumed)
+                .categories(foodProduct.getCategories() != null ? foodProduct.getCategories().toString() : "")
                 .nutriments(NutrimentsDTO.builder()
                         .energyKcal100g(nutriments.getEnergyKcal100g())
                         .proteins100g(nutriments.getProteins100g())
@@ -29,13 +30,14 @@ public class LoggedFoodProductsTransformer {
                 .build();
     }
 
-    public static LoggedFoodProductDTO toDto(CustomFoodProduct customFoodProduct, long logId){
+    public static LoggedFoodProductDTO toDto(CustomFoodProduct customFoodProduct, long logId, double gramsConsumed){
         Nutriments nutriments = customFoodProduct.getNutriments();
 
         return LoggedFoodProductDTO.builder()
                 .id(logId)
                 .product_name(customFoodProduct.getProduct_name())
                 .serving_size(customFoodProduct.getServing_size())
+                .gramsConsumed(gramsConsumed)
                 .nutriments(NutrimentsDTO.builder()
                         .energyKcal100g(nutriments.getEnergyKcal100g())
                         .proteins100g(nutriments.getProteins100g())
