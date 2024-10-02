@@ -10,6 +10,7 @@ import { UserService } from '../../services/user.service';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { FoodProduct } from '../../models/food-product.model';
 import { NgFor } from '@angular/common';
+import { LoggedFoodProduct } from '../../models/logged-food-product.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -36,7 +37,7 @@ export class DashboardComponent {
   today = new Date();
   weekStart = this.getMonday(new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate())); //variable here in case user can change week to show in graph
   data: number[] = [0];
-  consumedFoodItems: [number, FoodProduct[]][] = [];
+  consumedFoodItems: [number, LoggedFoodProduct[]][] = [];
   bmr = 10;
 
   constructor(private foodProductService: FoodProductService, private userService: UserService, private router: Router) {
@@ -190,5 +191,11 @@ export class DashboardComponent {
     this.chart?.updateOptions({
       animate: true
     })
+  }
+
+  updateWeek(){
+    this.getCaloriesConsumedByWeek(this.userService.getUserId(), this.weekStart);
+    this.getFoodItemsConsumedByWeek(this.userService.getUserId(), this.weekStart);
+    this.updateChartOptions();
   }
 }

@@ -1,30 +1,39 @@
-<div class="flex flex-col">
-    <button
-        class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-auto"
-        routerLink="/log">Eten loggen</button>
-    <div class="mt-2">
+<div class="flex flex-col space-y-4">
+    <!-- Date input and Eten Loggen button -->
+    <div class="flex flex-col md:flex-row space-x-4">
+        <div class="flex items-center space-x-2">
+            <label for="week" class="block text-md font-medium text-gray-700">Week datum:</label>
+            <input type="date" id="week" name="week" [(ngModel)]="weekStart" (change)="updateWeek()"
+                class="block px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
+        </div>
+        <div class="mt-2 md:mt-0">
+            <button class="w-full md:w-auto bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green"
+                routerLink="/log">Eten loggen</button>
+        </div>
+    </div>
+
+    <div class="mt-4">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
             [yaxis]="chartOptions.yaxis" [title]="chartOptions.title" [grid]="chartOptions.grid"
             [annotations]="chartOptions.annotations"></apx-chart>
     </div>
-    <div class="flex-col">
-        <h2 class="font-semibold text-xl mb-2 border-b-2 border-gray-300">Gelogde items</h2>
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-7 gap-6 w-full">
-            <!-- logged items this week?
-         add a date input so user can see logged items
-         add a button to the card the logged item is
-         in so user can delete it -->
+
+    <!-- Logged Items Section -->
+    <div class="mt-6">
+        <h2 class="font-semibold text-xl mb-2 border-b-4 border-vibrant-green">Gelogde items</h2>
+
+        <!-- Logged Items List -->
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-7 gap-6 w-full mt-4">
             <div *ngFor="let day of consumedFoodItems"
-                class="p-4 bg-white border rounded-md shadow-md flex flex-col space-y-4">
+                class="p-4 bg-white border rounded-md shadow-md flex flex-col space-y-4 overflow-y-auto max-h-80">
                 <h2 class="font-semibold">{{weekdays[day[0]]}}</h2>
                 <div *ngFor="let foodProduct of day[1]">
                     <ul class="flex-grow">
                         <li>Product naam: {{foodProduct.productName}}</li>
-                        <li>Portiegrootte: {{foodProduct.servingSize}}</li>
-                        <li>{{foodProduct.nutriments.energyKcal100g}}</li>
+                        <li>Gram geconsumeerd: {{foodProduct.gramsConsumed}}g</li>
                     </ul>
                     <button (click)="deleteLoggedFoodProduct(foodProduct.id!)"
-                        class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 mt-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="w-full bg-green text-white font-semibold py-2 px-4 mt-2 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green">
                         Verwijder product van log
                     </button>
                 </div>

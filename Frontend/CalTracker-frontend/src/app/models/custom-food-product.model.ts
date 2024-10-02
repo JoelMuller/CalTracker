@@ -5,6 +5,7 @@ export class CustomFoodProduct{
     productName: string;
     nutriments: Nutriments;
     servingSize: string;
+    gramsConsumed?: number;
     userId: number;
     
     constructor(productName: string, nutriments: Nutriments, servingSize: string, userId: number){

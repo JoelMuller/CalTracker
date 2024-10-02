@@ -6,6 +6,7 @@ import { FoodProduct } from '../models/food-product.model';
 import { SearchResults } from '../models/search-results.model';
 import { CustomFoodProduct } from '../models/custom-food-product.model';
 import { LogFoodProduct } from '../models/log-food-product.model';
+import { LoggedFoodProduct } from '../models/logged-food-product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +16,26 @@ export class FoodProductService {
 
   constructor(private http: HttpClient) { }
 
-  logBarcodeFoodItem(foodProductBarcode: number, date: Date, userId: number) {
+  logBarcodeFoodItem(foodProductBarcode: number, date: Date, gramsConsumed: number, userId: number) {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
 
     return this.http.post<any>(`${this.apiRoute}/log`, {
       "date": adjustedDate.toISOString().split('T')[0],
       "userId": userId,
+      "gramsConsumed": gramsConsumed,
       "foodProductBarcode": foodProductBarcode
     });
   }
 
-  logCustomFoodItem(customFoodProduct: CustomFoodProduct, date: Date, userId: number) {
+  logCustomFoodItem(customFoodProduct: CustomFoodProduct, date: Date, gramsConsumed: number, userId: number) {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
 
     return this.http.post<any>(`${this.apiRoute}/log`, {
       "date": adjustedDate.toISOString().split('T')[0],
       "userId": userId,
+      "gramsConsumed": gramsConsumed,
       "customFoodProduct": {
         "id": customFoodProduct.id,
         "product_name": customFoodProduct.productName,
@@ -112,19 +115,20 @@ export class FoodProductService {
     return this.http.get<number>(`${this.apiRoute}/get-calories-consumed-by-day`, { params });
   }
 
-  getLoggedItemsByDay(userId: number, date: Date): Observable<FoodProduct[]> {
+  getLoggedItemsByDay(userId: number, date: Date): Observable<LoggedFoodProduct[]> {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
 
     let params = new HttpParams().set('userId', userId).set('date', adjustedDate.toISOString().split('T')[0]);
     return this.http.get<any>(`${this.apiRoute}/get-items-logged-by-day`, { params })
       .pipe(
-        map((response: FoodProduct[]) =>
+        map((response: LoggedFoodProduct[]) =>
           response.map((foodProduct: any) => ({
             id: foodProduct.id,
             productName: foodProduct.product_name,
             categories: foodProduct.categories,
             servingSize: foodProduct.serving_size,
+            gramsConsumed: foodProduct.gramsConsumed,
             nutriments: foodProduct.nutriments
           }))
         )

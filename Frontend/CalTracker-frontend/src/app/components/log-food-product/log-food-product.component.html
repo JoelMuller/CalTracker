@@ -5,31 +5,42 @@
             <h2 class="font-semibold text-xl border-b-4 mb-2 border-vibrant-green">Voeg eigen product toe</h2>
             <!-- form to create custom food product -->
             <form (ngSubmit)="createAndLogNewCustomFoodProduct()" #userForm="ngForm" class="space-y-4">
-                <!-- Naam -->
                 <div class="flex space-x-4">
-                    <div class="w-1/3">
+                    <div class="w-1/2">
                         <label for="productName" class="block text-sm font-medium text-gray-700">Product naam*:</label>
                         <input type="text" id="productName" [(ngModel)]="newCustomFoodProduct.productName"
                             name="productName" placeholder="Caesarsalade" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
                                    ng-touched ng-invalid:border-red-500" #productName="ngModel" />
                         <div *ngIf="productName.invalid && productName.touched" class="text-red-500">
-                            Product naam is verplicht.
+                            Product naam is verplicht om in te vullen.
                         </div>
                     </div>
-                    <div class="w-1/3">
+                    <div class="w-1/2">
                         <label for="servingSize" class="block text-sm font-medium text-gray-700">Portie grootte in
                             gram*:</label>
                         <input type="text" id="servingSize" [(ngModel)]="newCustomFoodProduct.servingSize"
                             name="servingSize" placeholder="100g" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
                                    ng-touched ng-invalid:border-red-500" #servingSize="ngModel" />
                         <div *ngIf="servingSize.invalid && servingSize.touched" class="text-red-500">
-                            Portie grootte is verplicht.
+                            Portie grootte is verplicht om in te vullen.
                         </div>
                     </div>
-                    <div class="w-1/3">
-                        <label for="logDate" class="block text-sm font-medium text-gray-700">Datum:</label>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="gramsConsumed" class="block text-sm font-medium text-gray-700">Gram
+                            geconsumeerd*:</label>
+                        <input type="number" id="gramsConsumed" [(ngModel)]="gramsConsumed" name="gramsConsumed"
+                            placeholder="100" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
+                            ng-touched ng-invalid:border-red-500" #gramsConsumedInput="ngModel" />
+                        <div *ngIf="gramsConsumedInput.invalid && gramsConsumedInput.touched" class="text-red-500">
+                            Gram geconsumeerd is verplicht om in te vullen.
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <label for="logDate" class="block text-sm font-medium text-gray-700">Log datum:</label>
                         <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
-                            class="mt-1 block w-full px-3 py-2 border  border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
                     </div>
                 </div>
 
@@ -39,7 +50,7 @@
                 <div class="flex space-x-4">
                     <div class="w-1/2">
                         <label for="energyKcal100g" class="block text-sm font-medium text-gray-700">Energy/kcal per
-                            100g</label>
+                            100g*</label>
                         <input type="number" id="energyKcal100g" [(ngModel)]="newNutriments.energyKcal100g"
                             name="energyKcal100g" step="0.1" placeholder="0.5" required
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
@@ -97,19 +108,27 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
                 <div class="form-group">
                     <button type="submit" [disabled]="userForm.invalid" class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green
-                               disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        disabled:bg-gray-400 disabled:cursor-not-allowed">
                         Eigen product toevoegen en loggen
                     </button>
                 </div>
             </form>
         </div>
         <div class="container mx-auto py-4">
-            <h2 class="font-semibold text-xl mb-4 border-b-4 border-vibrant-green">Eigen eet items</h2>
-
-            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 overflow-y-auto max-h-[23rem]">
+            <div class="flex items-center mb-4 border-b-4 border-vibrant-green">
+                <div class="w-1/2">
+                    <h2 class="font-semibold text-xl ">Eigen eet items</h2>
+                </div>
+                <div class="w-1/2 flex items-center justify-end">
+                    <label for="logDate" class="mr-2 font-medium text-gray-700">Log datum:</label>
+                    <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
+                        class="px-3 py-1.5 mb-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
+                </div>
+            </div>
+            <div
+                class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 overflow-y-auto max-h-[23rem]">
                 <div *ngFor="let foodProduct of usersCustomFoodProducts"
                     class="p-4 bg-white border rounded-md shadow-md space-y-4">
                     <ul>
@@ -129,8 +148,17 @@
                             </ul>
                         </li>
                     </ul>
+                    <label for="gramsConsumed" class="block font-medium text-gray-700">Gram geconsumeerd:</label>
+                    <input type="number" id="gramsConsumed" [(ngModel)]="foodProduct.gramsConsumed" name="gramsConsumed"
+                        placeholder="100" required class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
+                        ng-touched ng-invalid:border-red-500" #gramsConsumedCustomFoodProductInput="ngModel" />
+                    <div *ngIf="gramsConsumedCustomFoodProductInput.invalid && gramsConsumedCustomFoodProductInput.touched"
+                        class="text-red-500">
+                        Gram geconsumeerd is verplicht om in te vullen.
+                    </div>
                     <button (click)="logCustomFoodProductById(foodProduct.id)"
-                        class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green mt-auto">
+                        [disabled]="!foodProduct.gramsConsumed || foodProduct.gramsConsumed === 0" class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green mt-auto
+                        disabled:bg-gray-400 disabled:cursor-not-allowed">
                         Log dit product
                     </button>
                 </div>
@@ -141,7 +169,7 @@
     <div class="basis-1/2">
         <!-- on the right side of the page -->
         <div class="flex-row mb-5">
-            <div class="w-full mb-7">
+            <div class="w-full mb-[31px]">
                 <h2 class="font-semibold text-xl border-b-4 mb-2 border-vibrant-green">Zoeken naar product</h2>
             </div>
 
@@ -165,10 +193,18 @@
 
             </div>
         </div>
-            
-        <div class="container mx-auto py-4">
-            <h2 class="font-semibold text-xl border-b-4 mb-4 border-vibrant-green">Zoek resultaten</h2>
 
+        <div class="container mx-auto py-4">
+            <div class="flex items-center mb-4 border-b-4 border-vibrant-green">
+                <div class="w-1/2">
+                    <h2 class="font-semibold text-xl ">Zoek resultaten</h2>
+                </div>
+                <div class="w-1/2 flex items-center justify-end">
+                    <label for="logDate" class="mr-2 font-medium text-gray-700">Log datum:</label>
+                    <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
+                        class="px-3 py-1.5 mb-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
+                </div>
+            </div>
             <!-- loading spinner -->
             <div>
                 <div *ngIf="loading" class="spinner"></div>
@@ -177,7 +213,7 @@
             <div *ngIf="searched"
                 class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto max-h-[44rem]">
                 <div *ngFor="let item of searchResults?.products"
-                    class="p-4 bg-white border rounded-md shadow-md flex flex-col space-y-4">
+                    class="p-4 bg-white border rounded-md shadow-md flex flex-col overflow-x-auto space-y-4">
                     <ul class="flex-grow">
                         <li class="font-bold">Product naam: {{item.productName}}</li>
                         <li>Categorieën: {{item.categories}}</li>
@@ -196,8 +232,18 @@
                             </ul>
                         </li>
                     </ul>
-                    <button (click)="logFoodProductByBarcode(item.id)"
-                        class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-green mt-auto">
+                    <label for="gramsConsumed" class="block font-medium text-gray-700">Gram geconsumeerd:</label>
+                    <input type="number" id="gramsConsumed" [(ngModel)]="item.gramsConsumed" name="gramsConsumed"
+                        placeholder="100" required class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
+                        ng-touched ng-invalid:border-red-500" #gramsConsumedCustomFoodProductInput="ngModel" />
+                    <div *ngIf="gramsConsumedCustomFoodProductInput.invalid && gramsConsumedCustomFoodProductInput.touched"
+                        class="text-red-500">
+                        Gram geconsumeerd is verplicht om in te vullen.
+                    </div>
+                    <!-- TODO: input for amount of grams consumed of this searched food product -->
+                    <button (click)="logFoodProductByBarcode(item.id, item.gramsConsumed)"
+                        [disabled]="!item.gramsConsumed || item.gramsConsumed === 0" class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green mt-auto
+                        disabled:bg-gray-400 disabled:cursor-not-allowed">
                         Log dit product
                     </button>
                 </div>

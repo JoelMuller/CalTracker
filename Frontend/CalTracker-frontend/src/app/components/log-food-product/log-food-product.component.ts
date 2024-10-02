@@ -25,6 +25,9 @@ export class LogFoodProductComponent {
   newCustomFoodProduct = new CustomFoodProduct('', this.newNutriments, '', this.userService.getUserId())
   usersCustomFoodProducts?: CustomFoodProduct[];
   logDate: string;
+  gramsConsumed!: number;
+  gramsConsumedCustomFoodProduct!: number;
+  gramsConsumedSearchedFoodProduct!: number;
 
   //search and pagination variables
   searchTerms = '';
@@ -61,13 +64,14 @@ export class LogFoodProductComponent {
       error: (e) =>
         console.log("error creating custom food product", e),
       complete: () =>
-        this.logCustomFoodProduct(customFoodProduct)
+        this.logCustomFoodProduct(customFoodProduct, this.gramsConsumed)
     })
     this.router.navigate(['/dashboard'])
   }
 
-  logFoodProductByBarcode(barcode?: number) {
-    this.foodProductService.logBarcodeFoodItem(barcode!, new Date(this.logDate), this.userService.getUserId())
+  logFoodProductByBarcode(barcode?: number, gramsConsumed?: number) {
+    console.log(gramsConsumed)
+    this.foodProductService.logBarcodeFoodItem(barcode!, new Date(this.logDate), gramsConsumed!, this.userService.getUserId())
       .subscribe({
         next: (response) =>
           console.log("logged food product"),
@@ -78,8 +82,8 @@ export class LogFoodProductComponent {
       })
   }
 
-  logCustomFoodProduct(customFoodProduct: CustomFoodProduct) {
-    this.foodProductService.logCustomFoodItem(customFoodProduct, new Date(this.logDate), this.userService.getUserId())
+  logCustomFoodProduct(customFoodProduct: CustomFoodProduct, gramsConsumed: number) {
+    this.foodProductService.logCustomFoodItem(customFoodProduct, new Date(this.logDate), gramsConsumed, this.userService.getUserId())
       .subscribe({
         next: (response) => {
           console.log("logged custom food product");
@@ -90,14 +94,15 @@ export class LogFoodProductComponent {
   }
 
   logCustomFoodProductById(id?: number) {
-    console.log("userid", this.userService.getUserId())
     if (id === undefined) {
       console.log("Custom food product has no id")
     } else {
       this.customFoodProductService
         .getCustomFoodItemByUserIdAndCustomFoodProductId(this.userService.getUserId(), id).subscribe({
-          next: (response) =>
-            this.logCustomFoodProduct(response),
+          next: (response) => {
+            const foodProduct = this.usersCustomFoodProducts!.find(product => product.id === id);
+            this.logCustomFoodProduct(response, foodProduct?.gramsConsumed!)
+          },
           error: (e) =>
             console.log("Error getting custom food product by id", e),
           complete: () =>
@@ -117,8 +122,7 @@ export class LogFoodProductComponent {
   }
 
   searchFoodProducts(page: number) {
-    //how to check if disabled button condition is also allowed here
-    if (page != 0 && this.totalPages > page) {
+    if (page != 0 && this.totalPages >= page) {
       this.loading = true;
       this.foodProductService.searchFoodItems(this.searchTerms, page).subscribe({
         next: (response) => {
@@ -130,9 +134,12 @@ export class LogFoodProductComponent {
         },
         error: (e) =>
           console.log("error getting search results", e),
-        complete: () => 
+        complete: () =>
           this.loading = false
       })
+    }else{
+      console.log(this.totalPages)
+      console.log("end of results")
     }
   }
 }
