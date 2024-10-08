@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -65,8 +66,10 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody @Valid UserDTO userDTO) {
         try {
             this.userService.createUser(userDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User " + userDTO.getName() + " created");
+            System.out.println("in try after creating user");
+            return ResponseEntity.status(HttpStatus.OK).body("User " + userDTO.getName() + " created");
         } catch (IllegalArgumentException e) {
+            System.out.println("in catch of create");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

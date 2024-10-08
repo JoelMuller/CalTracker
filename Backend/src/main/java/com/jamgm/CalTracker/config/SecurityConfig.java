@@ -5,6 +5,7 @@ import com.jamgm.CalTracker.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,13 +43,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .formLogin(AbstractHttpConfigurer::disable) // Disable form login
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//                .authorizeHttpRequests(authz -> authz
-//                        .requestMatchers("/api/user/login", "/api/user/register", "/api/user/check-email/**").permitAll() // Public access
-//                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI and API docs access
-//                        .anyRequest().authenticated() // All other requests must be authenticated
-//                );
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/user/login", "/user/register", "/user/check-email/**", "/calculate/bmr").permitAll() // Public access
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI and API docs access
+                        .requestMatchers(HttpMethod.POST, "/custom-food-item", "/user/register", "/user/login").permitAll()
+                        .anyRequest().authenticated() // All other requests must be authenticated
+                )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

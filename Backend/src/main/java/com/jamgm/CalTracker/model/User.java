@@ -21,6 +21,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private double weight;
     private int basalMetabolicRate;
     private double weightLossPerWeek; //amount of kg's user wants to lose per week
     @OneToMany
@@ -31,11 +32,12 @@ public class User {
     private List<CustomFoodProduct> customFoodProducts;
 
     @Builder
-    public User(long id, String name, String email, String password, int basalMetabolicRate, double weightLossPerWeek, List<LogFoodProduct> loggedFoodProducts, List<CustomFoodProduct> customFoodProducts){
+    public User(long id, String name, String email, String password, double weight, int basalMetabolicRate, double weightLossPerWeek, List<LogFoodProduct> loggedFoodProducts, List<CustomFoodProduct> customFoodProducts){
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.weight = weight;
         this.basalMetabolicRate = basalMetabolicRate;
         this.weightLossPerWeek = weightLossPerWeek;
         this.loggedFoodProducts = loggedFoodProducts;
