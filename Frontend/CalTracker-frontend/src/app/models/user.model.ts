@@ -6,14 +6,16 @@ export class User{
     name: string;
     email: string;
     password: string;
+    weight: number;
     basalMetabolicRate: number;
     weightLossPerWeek: number;
     loggedFoodProducts?: LogFoodProduct[];
     
-    constructor(name: string, email: string, @Optional()password: string, basalMetabolicRate: number, weightLossPerWeek: number){
+    constructor(name: string, email: string, @Optional()password: string, weight: number, basalMetabolicRate: number, weightLossPerWeek: number){
         this.name = name;
         this.email = email;
         this.password = password;
+        this.weight = weight;
         this.basalMetabolicRate = basalMetabolicRate;
         this.weightLossPerWeek = weightLossPerWeek;
     }

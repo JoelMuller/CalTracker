@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { catchError, map, Observable, tap } from 'rxjs';
@@ -13,6 +13,14 @@ export class UserService {
   private readonly apiRoute = environment.apiUrl + "/user"
 
   constructor(private http: HttpClient) { }
+
+  headers() : HttpHeaders{
+    return new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add the Bearer token here
+      'Content-type': 'application/json',
+      'Accept': 'application/json'
+    });
+  }
 
   login(email: string, password: string) {
     return this.http.post<any>(`${this.apiRoute}/login`, {
@@ -50,23 +58,27 @@ export class UserService {
   }
 
   createUser(user: User, bmrInfo: any): Observable<string> {
-    return this.http.post<string>(`${this.apiRoute}/register`, {
+    return this.http.post(`${this.apiRoute}/register`, {
       "name": user.name,
       "email": user.email,
       "password": user.password,
+      "weight": user.weight,
       "basalMetabolicRate": user.basalMetabolicRate,
       "weightLossPerWeek": user.weightLossPerWeek,
-    });
+    }, {responseType: 'text'})
   }
 
   getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiRoute}/${id}`)
+    let headers = this.headers()
+
+    return this.http.get<User>(`${this.apiRoute}/${id}`, {headers})
       .pipe(
         map(response => ({
           id: response.id,
           name: response.name,
           email: response.email,
           password: response.password,
+          weight: response.weight,
           basalMetabolicRate: response.basalMetabolicRate,
           weightLossPerWeek: response.weightLossPerWeek,
           loggedFoodProducts: response.loggedFoodProducts
@@ -75,18 +87,23 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<User> {
-    return this.http.put<User>(this.apiRoute, {
+    let headers = this.headers()
+
+    return this.http.put<User>(this.apiRoute, { headers,
       "id": user.id,
       "name": user.name,
       "email": user.email,
       "password": user.password,
+      "weight": user.weight,
       "basalMetabolicRate": user.basalMetabolicRate,
       "weightLossPerWeek": user.weightLossPerWeek
     });
   }
 
   deleteUser(id: number) {
-    this.http.delete<User>(`${this.apiRoute}/${id}`);
+    let headers = this.headers()
+
+    this.http.delete<User>(`${this.apiRoute}/${id}`, {headers});
   }
 }
 

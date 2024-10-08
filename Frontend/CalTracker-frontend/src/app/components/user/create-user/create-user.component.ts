@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { NgIf } from '@angular/common';
 import { CalculationsService } from '../../../services/calculations.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-user',
@@ -14,42 +15,55 @@ import { CalculationsService } from '../../../services/calculations.service';
 })
 
 export class CreateUserComponent {
-  newUser = new User('', '', '', 0, 0.5)
+  newUser = new User('', '', '', 0, 0, 0.5);
   emailInUse: boolean = false;
   bmrInfo: any = {
-    weight: null,
     height: null,
     age: null,
     gender: null,
     activity: null
   };
 
-  constructor(private userService: UserService, private calculationsService: CalculationsService) { }
+  constructor(private userService: UserService, private calculationsService: CalculationsService, private router: Router) { }
 
   onSubmit() {
     if (!this.emailInUse) {
-      let {weight, height, age, gender, activity} = this.bmrInfo;
-      if(weight && height && age && gender && activity !== null){
-        this.calculationsService.basalMetabolicRate(weight, height, age, gender, activity)
-        .subscribe({
-          next: (result) => {
-            this.newUser.basalMetabolicRate = result;
-            this.userService.createUser(this.newUser, this.bmrInfo).subscribe({
-              next: (response) =>
-                console.log("user created"),
-              error: (e) =>
-                console.log("error:", e)
-            });
-          },
-          error: (e) =>
-            console.log("Error calculating BMR:", e)
-        })
-      }else{
-        alert("Please fill in all fields.")
+      let { height, age, gender, activity } = this.bmrInfo;
+      if (this.newUser.weight && height && age && activity !== null) {
+        this.calculationsService.basalMetabolicRate(this.newUser.weight, height, age, gender, activity)
+          .subscribe({
+            next: (result) => {
+              this.newUser.basalMetabolicRate = result;
+            },
+            error: (e) =>
+              console.log("Error calculating BMR:", e),
+            complete: () =>
+              this.createUser()
+          })
+      } else {
+        alert("Vul alle velden in.")
       }
     } else {
-      alert("Email adres is already in use.")
+      alert("Email adres is al in gebruik.")
     }
+  }
+
+  createUser() {
+    this.userService.createUser(this.newUser, this.bmrInfo).subscribe({
+      next: (response) =>
+        console.log(response),
+      error: (e) =>
+        console.log("error creating user:", e),
+      complete: () => {
+        this.userService.login(this.newUser.email, this.newUser.password).subscribe({
+          next: (response) => {
+            this.router.navigate(['/dashboard']);
+          },
+          error: (e) =>
+            console.log("login unsuccesfull", e)
+        })
+      }
+    });
   }
 
   checkEmail() {

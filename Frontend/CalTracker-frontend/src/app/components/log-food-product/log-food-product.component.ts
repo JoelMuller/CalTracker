@@ -30,6 +30,9 @@ export class LogFoodProductComponent {
   gramsConsumedSearchedFoodProduct!: number;
 
   //search and pagination variables
+  barcode = '';
+  barcodeFoodItem?: FoodProduct;
+  searchedBarcode = false;
   searchTerms = '';
   searchResults?: SearchResults;
   searched = false;
@@ -70,7 +73,6 @@ export class LogFoodProductComponent {
   }
 
   logFoodProductByBarcode(barcode?: number, gramsConsumed?: number) {
-    console.log(gramsConsumed)
     this.foodProductService.logBarcodeFoodItem(barcode!, new Date(this.logDate), gramsConsumed!, this.userService.getUserId())
       .subscribe({
         next: (response) =>
@@ -129,6 +131,7 @@ export class LogFoodProductComponent {
           this.searchResults = response;
           this.totalSearchItems = response.count;
           this.currentPage = response.page;
+          this.searchedBarcode = false;
           this.searched = true;
           this.totalPages = Math.ceil(this.totalSearchItems / 10)
         },
@@ -137,9 +140,32 @@ export class LogFoodProductComponent {
         complete: () =>
           this.loading = false
       })
-    }else{
+    } else {
       console.log(this.totalPages)
       console.log("end of results")
+    }
+  }
+
+  findFoodProductByBarcode() {
+    if (this.barcode !== '' || this.barcode !== undefined) {
+      this.loading = true;
+      this.foodProductService.getFoodItemByBarcode(this.barcode).subscribe({
+        next: (response) => {
+          this.barcodeFoodItem = response;
+          this.searched = false;
+          this.searchedBarcode = true;
+          let regex = /(\d+\.?\d*)\s*g/;
+          let match = response.servingSize.match(regex);
+          if(match){
+            this.barcodeFoodItem.gramsConsumed = parseFloat(match[1])
+          }
+        }, error: (e) =>
+          console.log("error getting food product by barcode", e),
+        complete: () =>
+          this.loading = false
+      })
+    } else {
+      console.log("No barcode inputted")
     }
   }
 }
