@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { CustomFoodProduct } from '../models/custom-food-product.model';
@@ -12,8 +12,18 @@ export class CustomFoodProductService {
 
   constructor(private http: HttpClient) { }
 
+  headers() : HttpHeaders{
+    return new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add the Bearer token here
+      'Content-type': 'application/json',
+      'Accept': 'application/json'
+    });
+  }
+
+
   createCustomFoodProduct(customFoodProduct: CustomFoodProduct): Observable<CustomFoodProduct> {
-    return this.http.post<CustomFoodProduct>(this.apiRoute, {
+    let headers = this.headers()
+    return this.http.post<CustomFoodProduct>(this.apiRoute, {headers,
       "product_name": customFoodProduct.productName,
       "nutriments": {
         "energy-kcal_100g": customFoodProduct.nutriments.energyKcal100g,
@@ -31,7 +41,9 @@ export class CustomFoodProductService {
   }
 
   getCustomFoodItemByUserIdAndCustomFoodProductId(userId: number, customFoodProductId: number): Observable<CustomFoodProduct> {
-    return this.http.get<any>(`${this.apiRoute}/${userId}/${customFoodProductId}`)
+    let headers = this.headers()
+    
+    return this.http.get<any>(`${this.apiRoute}/${userId}/${customFoodProductId}`, {headers})
       .pipe(
         map(response => ({
           id: response.id,
@@ -45,7 +57,9 @@ export class CustomFoodProductService {
   }
 
   getCustomFoodItemsByUserId(userId: number): Observable<CustomFoodProduct[]> {
-    return this.http.get<CustomFoodProduct[]>(`${this.apiRoute}/${userId}`)
+    let headers = this.headers()
+
+    return this.http.get<CustomFoodProduct[]>(`${this.apiRoute}/${userId}`, {headers})
       .pipe(
         map((response: CustomFoodProduct[]) =>
           response.map((customFoodProduct: any) => ({
@@ -71,7 +85,9 @@ export class CustomFoodProductService {
   }
 
   updateCustomFoodItem(customFoodProduct: CustomFoodProduct): Observable<CustomFoodProduct> {
-    return this.http.put<CustomFoodProduct>(`${this.apiRoute}`, {
+    let headers = this.headers()
+
+    return this.http.put<CustomFoodProduct>(`${this.apiRoute}`, {headers,
       "id": customFoodProduct.id,
       "product_name": customFoodProduct.productName,
       "nutriments": {
@@ -90,6 +106,8 @@ export class CustomFoodProductService {
   }
 
   deleteCustomFoodItem(customFoodProductId: number) {
-    this.http.delete<CustomFoodProduct>(`${this.apiRoute}/${customFoodProductId}`);
+    let headers = this.headers()
+
+    this.http.delete<CustomFoodProduct>(`${this.apiRoute}/${customFoodProductId}`, {headers});
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { FoodProduct } from '../models/food-product.model';
 import { SearchResults } from '../models/search-results.model';
@@ -16,21 +16,33 @@ export class FoodProductService {
 
   constructor(private http: HttpClient) { }
 
+  headers() : HttpHeaders{
+    return new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add the Bearer token here
+      'Content-type': 'application/json',
+      'Accept': 'application/json'
+    });
+  }
+
   logBarcodeFoodItem(foodProductBarcode: number, date: Date, gramsConsumed: number, userId: number) {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
+
+    let headers = this.headers()
 
     return this.http.post<any>(`${this.apiRoute}/log`, {
       "date": adjustedDate.toISOString().split('T')[0],
       "userId": userId,
       "gramsConsumed": gramsConsumed,
       "foodProductBarcode": foodProductBarcode
-    });
+    }, { headers });
   }
 
   logCustomFoodItem(customFoodProduct: CustomFoodProduct, date: Date, gramsConsumed: number, userId: number) {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
+
+    let headers = this.headers()
 
     return this.http.post<any>(`${this.apiRoute}/log`, {
       "date": adjustedDate.toISOString().split('T')[0],
@@ -51,17 +63,16 @@ export class FoodProductService {
           "sodium_100g": customFoodProduct.nutriments.sodium100g
         }
       }
-    },{
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json'
-      }
-    });
+    }, { headers }
+    );
   }
 
   searchFoodItems(searchTerms: string, page: number): Observable<SearchResults> {
+    let headers = this.headers()
+
     let params = new HttpParams().set('search_terms', searchTerms).set('page', page);
-    return this.http.get<any>(`${this.apiRoute}/search`, { params })
+
+    return this.http.get<any>(`${this.apiRoute}/search`, { headers, params })
       .pipe(
         map((response: any) => ({
           count: response.count,
@@ -87,14 +98,25 @@ export class FoodProductService {
   }
 
   getFoodItemByBarcode(barcode: string): Observable<FoodProduct> {
-    return this.http.get<any>(`${this.apiRoute}/product/${barcode}`)
+    let headers = this.headers()
+
+    return this.http.get<any>(`${this.apiRoute}/product/${barcode}`, {headers})
       .pipe(
         map(response => ({
           id: response._id,
           productName: response.product_name,
           categories: response.categories,
           servingSize: response.serving_size,
-          nutriments: response.nutriments
+          nutriments: {
+            energyKcal100g: response.nutriments['energy-kcal_100g'],
+            proteins100g: response.nutriments['proteins_100g'],
+            carbohydrates100g: response.nutriments['carbohydrates_100g'] ?? 0,
+            sugars100g: response.nutriments['sugars_100g'],
+            fat100g: response.nutriments['fat_100g'],
+            saturatedFat100g: response.nutriments['saturated-fat_100g'],
+            fiber100g: response.nutriments['fiber_100g'],
+            sodium100g: response.nutriments['sodium_100g']
+          }
         }))
       )
   }
@@ -103,24 +125,33 @@ export class FoodProductService {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
 
+    let headers = this.headers()
+
     let params = new HttpParams().set('userId', userId).set('date', adjustedDate.toISOString().split('T')[0]);
-    return this.http.get<number>(`${this.apiRoute}/get-protein-consumed-by-day`, { params });
+    
+    return this.http.get<number>(`${this.apiRoute}/get-protein-consumed-by-day`, { headers, params });
   }
 
   getCaloriesConsumedByDay(userId: number, date: Date): Observable<number> {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
 
+    let headers = this.headers()
+
     let params = new HttpParams().set('userId', userId).set('date', adjustedDate.toISOString().split('T')[0]);
-    return this.http.get<number>(`${this.apiRoute}/get-calories-consumed-by-day`, { params });
+
+    return this.http.get<number>(`${this.apiRoute}/get-calories-consumed-by-day`, { headers, params });
   }
 
   getLoggedItemsByDay(userId: number, date: Date): Observable<LoggedFoodProduct[]> {
     let adjustedDate = new Date(date);
     adjustedDate.setHours(adjustedDate.getHours() + 2); //add 2 hours to account for time zone difference
 
+    let headers = this.headers()
+
     let params = new HttpParams().set('userId', userId).set('date', adjustedDate.toISOString().split('T')[0]);
-    return this.http.get<any>(`${this.apiRoute}/get-items-logged-by-day`, { params })
+
+    return this.http.get<any>(`${this.apiRoute}/get-items-logged-by-day`, { headers, params })
       .pipe(
         map((response: LoggedFoodProduct[]) =>
           response.map((foodProduct: any) => ({
@@ -136,6 +167,8 @@ export class FoodProductService {
   }
 
   deleteLoggedFoodProduct(id: number) {
-    return this.http.delete<LogFoodProduct>(`${this.apiRoute}/log/${id}`);
+    let headers = this.headers()
+
+    return this.http.delete<LogFoodProduct>(`${this.apiRoute}/log/${id}`, {headers});
   }
 }
