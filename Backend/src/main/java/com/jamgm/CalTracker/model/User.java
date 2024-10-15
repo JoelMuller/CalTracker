@@ -30,9 +30,10 @@ public class User {
     @OneToMany
     @JoinColumn(nullable = true)
     private List<CustomFoodProduct> customFoodProducts;
-
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @Builder
-    public User(long id, String name, String email, String password, double weight, int basalMetabolicRate, double weightLossPerWeek, List<LogFoodProduct> loggedFoodProducts, List<CustomFoodProduct> customFoodProducts){
+    public User(long id, String name, String email, String password, double weight, int basalMetabolicRate, double weightLossPerWeek, List<LogFoodProduct> loggedFoodProducts, List<CustomFoodProduct> customFoodProducts, Role role){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -42,5 +43,6 @@ public class User {
         this.weightLossPerWeek = weightLossPerWeek;
         this.loggedFoodProducts = loggedFoodProducts;
         this.customFoodProducts = customFoodProducts;
+        this.role = role;
     }
 }

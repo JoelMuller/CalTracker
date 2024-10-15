@@ -13,6 +13,7 @@ public class UserTransformer {
                 .basalMetabolicRate(user.getBasalMetabolicRate())
                 .weightLossPerWeek(user.getWeightLossPerWeek())
                 .loggedFoodProducts(user.getLoggedFoodProducts())
+                .role(user.getRole())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class UserTransformer {
                 .basalMetabolicRate(dto.getBasalMetabolicRate())
                 .weightLossPerWeek(dto.getWeightLossPerWeek())
                 .loggedFoodProducts(dto.getLoggedFoodProducts())
+                .role(dto.getRole())
                 .build();
     }
 }

@@ -3,12 +3,15 @@ package com.jamgm.CalTracker.service;
 import com.jamgm.CalTracker.model.User;
 import com.jamgm.CalTracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -21,11 +24,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+
         // Convert User entity to Spring Security UserDetails
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),      // Use email as the username
                 user.getPassword(),   // Encrypted password
-                new ArrayList<>()     // Authorities (roles) can be added here
+                authorities           // Authorities
         );
     }
 

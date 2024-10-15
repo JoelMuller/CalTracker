@@ -1,5 +1,6 @@
 package com.jamgm.CalTracker.service;
 
+import com.jamgm.CalTracker.model.Role;
 import com.jamgm.CalTracker.model.User;
 import com.jamgm.CalTracker.repository.UserRepository;
 import com.jamgm.CalTracker.web.rest.DTO.UserDTO;
@@ -23,6 +24,7 @@ public class UserService {
         if(userRepository.existsByEmail(user.getEmail())){
             throw new IllegalArgumentException("Email already in use");
         }
+        user.setRole(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return UserTransformer.toDto(userRepository.save(UserTransformer.fromDto(user)));
     }

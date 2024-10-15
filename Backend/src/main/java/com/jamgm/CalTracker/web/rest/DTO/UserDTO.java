@@ -2,6 +2,7 @@ package com.jamgm.CalTracker.web.rest.DTO;
 
 import com.jamgm.CalTracker.model.CustomFoodProduct;
 import com.jamgm.CalTracker.model.LogFoodProduct;
+import com.jamgm.CalTracker.model.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -29,4 +30,5 @@ public class UserDTO {
     private double weightLossPerWeek; //amount of kg's user wants to lose per week
     private List<LogFoodProduct> loggedFoodProducts;
     private List<CustomFoodProduct> customFoodProducts;
+    private Role role;
 }
