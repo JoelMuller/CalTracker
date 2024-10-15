@@ -1,21 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CustomFoodProductService } from '../../services/custom-food-product.service';
 import { CustomFoodProduct } from '../../models/custom-food-product.model';
 import { Nutriments } from '../../models/nutriments.model';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FoodProductService } from '../../services/food-product.service';
-import { response } from 'express';
 import { FoodProduct } from '../../models/food-product.model';
 import { SearchResults } from '../../models/search-results.model';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { BarcodeScannerLivestreamComponent, BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
+import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
+import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-log-food-product',
   standalone: true,
-  imports: [FormsModule, NgFor, NgIf],
+  imports: [FormsModule, CommonModule, BarcodeScannerLivestreamModule, ZXingScannerModule],
   templateUrl: './log-food-product.component.html',
   styleUrl: './log-food-product.component.scss'
 })
@@ -30,6 +31,8 @@ export class LogFoodProductComponent {
   gramsConsumedSearchedFoodProduct!: number;
 
   //search and pagination variables
+  allowedFormats = [BarcodeFormat.EAN_13]
+  scannerEnabled = false;
   barcode = '';
   barcodeFoodItem?: FoodProduct;
   searchedBarcode = false;
@@ -181,5 +184,25 @@ export class LogFoodProductComponent {
     } else {
       console.log("No barcode inputted")
     }
+  }
+
+  turnScannerOn(){
+    this.scannerEnabled = true;
+  }
+
+  scanErrorHandler(error: any){
+    console.log("Error scanning: ", error);
+  }
+
+  scanSuccessHandler(result: string){
+    console.log("success");
+    console.log(result)
+    this.scannerEnabled = false;
+    this.barcode = result;
+    this.findFoodProductByBarcode()
+  }
+  
+  scanFailureHandler(){
+    console.log("Couldn't scan barcode")
   }
 }

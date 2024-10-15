@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexStroke, ApexGrid, NgApexchartsModule, ApexAnnotations, ApexYAxis, ApexResponsive } from 'ng-apexcharts';
 import { FoodProductService } from '../../services/food-product.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +26,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgApexchartsModule, ReactiveFormsModule, FormsModule, RouterLink, RouterOutlet, NgFor, NgIf],
+  imports: [NgApexchartsModule, ReactiveFormsModule, FormsModule, RouterLink, RouterOutlet, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

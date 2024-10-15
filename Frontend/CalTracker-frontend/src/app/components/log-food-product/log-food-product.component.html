@@ -168,7 +168,7 @@
     </div>
     <div class="basis-1/2">
         <!-- on the right side of the page -->
-        <div class="flex-row mb-5">
+        <div class="flex-row mb-2">
             <div class="w-full mb-[11px]">
                 <h2 class="font-semibold text-xl border-b-4 mb-2 border-vibrant-green">Zoeken naar product</h2>
             </div>
@@ -189,27 +189,40 @@
                     </div>
 
                     <button [disabled]="searchTerms == ''" (click)="searchFoodProducts(1)" class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green focus:ring-offset-2 
-                bg-green hover:bg-light-green text-white disabled:bg-gray-400 disabled:cursor-not-allowed">
+                bg-green hover:bg-light-green text-white font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed">
                         Zoek
                     </button>
                 </div>
             </div>
-            <!-- Barcode input -->
-            <div>
-                <label for="searchTerms" class="block text-sm font-medium text-gray-700">Barcode:</label>
-                <div class="w-full flex items-center space-x-2">
-                    <div class="relative flex-grow">
-                        <input type="text" id="searchTerms" name="searchTerms" [(ngModel)]="barcode"
-                            (keyup.enter)="findFoodProductByBarcode()"
-                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm"
-                            placeholder="5059883097480" />
-                    </div>
+            <div class="flex flex-col lg:flex-row items-end">
+                <!-- Barcode input -->
+                <div class="w-full lg:w-1/2 2xl:w-3/4">
+                    <label for="searchTerms" class="block text-sm font-medium text-gray-700">Barcode:</label>
+                    <div class="w-full flex items-center space-x-2">
+                        <div class="relative flex-grow">
+                            <input type="text" id="searchTerms" name="searchTerms" [(ngModel)]="barcode"
+                                (keyup.enter)="findFoodProductByBarcode()"
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm"
+                                placeholder="5059883097480" />
+                        </div>
 
-                    <button [disabled]="barcode == ''" (click)="findFoodProductByBarcode()" class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green focus:ring-offset-2 
-                bg-green hover:bg-light-green text-white disabled:bg-gray-400 disabled:cursor-not-allowed">
-                        Zoek
-                    </button>
+                        <button [disabled]="barcode == ''" (click)="findFoodProductByBarcode()" class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green focus:ring-offset-2 
+                bg-green hover:bg-light-green text-white font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            Zoek
+                        </button>
+                    </div>
                 </div>
+                <!-- Barcode scanner button -->
+                <div class="w-full lg:w-1/2 mt-2 md:ml-2 2xl:w-1/4">
+                    <button (click)="turnScannerOn()" class="px-4 py-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-green focus:ring-offset-2 
+                    bg-green hover:bg-light-green text-white font-semibold">
+                    Scan barcode</button>
+                </div>
+            </div>
+            <div *ngIf="scannerEnabled" class="mt-5 border-4 border-green">
+                <zxing-scanner [enable]="scannerEnabled" [formats]="allowedFormats"
+                    (scanSuccess)="scanSuccessHandler($event)" (scanError)="scanErrorHandler($event)" 
+                    (scanFailure)="scanFailureHandler()"></zxing-scanner>
             </div>
         </div>
 
@@ -228,7 +241,7 @@
             <div>
                 <div *ngIf="loading" class="spinner"></div>
             </div>
-            
+
             <div *ngIf="searchedBarcode" class="p-4 bg-white border rounded-md shadow-md flex flex-col space-y-4">
                 <ul class="flex-grow">
                     <li class="font-bold">Product naam: {{barcodeFoodItem!.productName}}</li>
@@ -249,9 +262,9 @@
                     </li>
                 </ul>
                 <label for="gramsConsumed" class="block font-medium text-gray-700">Gram geconsumeerd:</label>
-                <input type="number" id="gramsConsumed" [(ngModel)]="barcodeFoodItem!.gramsConsumed" name="gramsConsumed"
-                    placeholder="100" required class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
-                    ng-touched ng-invalid:border-red-500" #gramsConsumedCustomFoodProductInput="ngModel"/>
+                <input type="number" id="gramsConsumed" [(ngModel)]="barcodeFoodItem!.gramsConsumed"
+                    name="gramsConsumed" placeholder="100" required class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
+                    ng-touched ng-invalid:border-red-500" #gramsConsumedCustomFoodProductInput="ngModel" />
                 <div *ngIf="gramsConsumedCustomFoodProductInput.invalid && gramsConsumedCustomFoodProductInput.touched"
                     class="text-red-500">
                     Gram geconsumeerd is verplicht om in te vullen.
