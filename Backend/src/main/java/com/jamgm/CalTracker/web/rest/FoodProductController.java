@@ -28,17 +28,30 @@ public class FoodProductController {
 
     @GetMapping(value = "/product/{barcode}")
     @Operation(summary = "Get nutrition information by barcode")
-    public ResponseEntity<Mono<ProductDTO>> getFoodItemByBarcode(@PathVariable("barcode") final String barcode){
-        Mono<ProductDTO> product = this.foodProductService.getFoodItemByBarcode(barcode);
-        return ResponseEntity.ok(product);
+    public ResponseEntity<ProductDTO> getFoodItemByBarcode(@PathVariable("barcode") final String barcode) {
+        ProductDTO product = this.foodProductService.getFoodItemByBarcode(barcode);
+
+        if (product != null) {
+            return ResponseEntity.ok(product);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/search")
-    public ResponseEntity<Mono<SearchItemsDTO>> searchFoodItemsBySearchTerm(@RequestParam("search_terms") final String terms,
-                                                            @RequestParam("page") final int page){
-        Mono<SearchItemsDTO> products = this.foodProductService.searchFoodItemsBySearchTerm(terms, page);
-        return ResponseEntity.ok(products);
+    public ResponseEntity<SearchItemsDTO> searchFoodItemsBySearchTerm(
+            @RequestParam("search_terms") final String terms,
+            @RequestParam("page") final int page) {
+
+        SearchItemsDTO products = this.foodProductService.searchFoodItemsBySearchTerm(terms, page);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
+
 
     @PostMapping(value = "/log")
     @Operation(summary = "Logs given custom food item or barcode for a user")

@@ -11,6 +11,7 @@ import com.jamgm.CalTracker.web.rest.transformer.CustomFoodProductTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.FoodProductTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.LoggedFoodProductsTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.SearchItemsTransformer;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -35,26 +36,25 @@ public class FoodProductService {
         this.openFoodFactsApiService = openFoodFactsApiService;
     }
 
-    public Mono<ProductDTO> getFoodItemByBarcode(String barcode){
-        return this.openFoodFactsApiService.getFoodItemByBarcode(barcode)
-                .map(FoodProductTransformer::toDto);
+    public ProductDTO getFoodItemByBarcode(String barcode) {
+        FoodProduct foodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(barcode);
+        return FoodProductTransformer.toDto(foodProduct);
     }
 
-    public Mono<SearchItemsDTO> searchFoodItemsBySearchTerm(String terms, int page){
-        return this.openFoodFactsApiService.searchFoodItemsBySearchTerm(terms, page)
-                .map(SearchItemsTransformer::toDto);
+    public SearchItemsDTO searchFoodItemsBySearchTerm(String terms, int page) {
+        return SearchItemsTransformer.toDto(this.openFoodFactsApiService.searchFoodItemsBySearchTerm(terms, page));
     }
 
-    public List<LoggedFoodProductDTO> getAllLoggedFoodItemsByDate(LocalDate date, long userId){
+    public List<LoggedFoodProductDTO> getAllLoggedFoodItemsByDate(LocalDate date, long userId) {
         List<LogFoodProduct> logFoodProducts = logFoodProductRepository.findAllByDateAndUserId(date, userId);
         List<LoggedFoodProductDTO> allProducts = new ArrayList<>();
-        for(LogFoodProduct logFoodProduct: logFoodProducts){
-            if(logFoodProduct.getFoodProductBarcode() != null){
-                Mono<FoodProduct> foodProduct = openFoodFactsApiService
-                        .getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode());
-                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct.block(), logFoodProduct.getId(),
+
+        for (LogFoodProduct logFoodProduct : logFoodProducts) {
+            if (logFoodProduct.getFoodProductBarcode() != null) {
+                FoodProduct foodProduct = openFoodFactsApiService.getFoodItemByBarcode(logFoodProduct.getFoodProductBarcode());
+                allProducts.add(LoggedFoodProductsTransformer.toDto(foodProduct, logFoodProduct.getId(),
                         logFoodProduct.getGramsConsumed()));
-            }else{
+            } else {
                 CustomFoodProduct customFoodProduct = logFoodProduct.getCustomFoodProduct();
                 allProducts.add(LoggedFoodProductsTransformer.toDto(customFoodProduct, logFoodProduct.getId(),
                         logFoodProduct.getGramsConsumed()));
@@ -83,20 +83,23 @@ public class FoodProductService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public void logFoodItem(LogFoodProductDTO logFoodProductDTO){
-        if(this.userRepository.existsById(logFoodProductDTO.getUserId())) {
-            User user = this.userRepository.findById(logFoodProductDTO.getUserId()).get();
-            if(logFoodProductDTO.getFoodProductBarcode() != null) {
-                Mono<LogFoodProduct> logFoodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getFoodProductBarcode())
-                        .map(foodProduct -> LogFoodProduct.builder()
-                                .gramsConsumed(logFoodProductDTO.getGramsConsumed())
-                                .foodProductBarcode(foodProduct.getBarcode())
-                                .productName(foodProduct.getProduct_name())
-                                .date(logFoodProductDTO.getDate())
-                                .user(user)
-                                .build());
-                this.logFoodProductRepository.save(logFoodProduct.block());
-            }else{
+    public void logFoodItem(LogFoodProductDTO logFoodProductDTO) {
+        if (this.userRepository.existsById(logFoodProductDTO.getUserId())) {
+            User user = this.userRepository.findById(logFoodProductDTO.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (logFoodProductDTO.getFoodProductBarcode() != null) {
+                FoodProduct foodProduct = this.openFoodFactsApiService.getFoodItemByBarcode(logFoodProductDTO.getFoodProductBarcode());
+                LogFoodProduct logFoodProduct = LogFoodProduct.builder()
+                        .gramsConsumed(logFoodProductDTO.getGramsConsumed())
+                        .foodProductBarcode(foodProduct.getBarcode())
+                        .productName(foodProduct.getProduct_name())
+                        .date(logFoodProductDTO.getDate())
+                        .user(user)
+                        .build();
+
+                this.logFoodProductRepository.save(logFoodProduct);
+            } else {
                 LogFoodProduct lfp = LogFoodProduct.builder()
                         .gramsConsumed(logFoodProductDTO.getGramsConsumed())
                         .customFoodProduct(CustomFoodProductTransformer.fromDto(logFoodProductDTO.getCustomFoodProduct(), user))
@@ -104,12 +107,14 @@ public class FoodProductService {
                         .date(logFoodProductDTO.getDate())
                         .user(user)
                         .build();
+
                 this.logFoodProductRepository.save(lfp);
             }
-        }else{
+        } else {
             throw new RuntimeException("Invalid user id");
         }
     }
+
     public void deleteLoggedFoodItem(long logId){
         this.logFoodProductRepository.deleteById(logId);
     }
