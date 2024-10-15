@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  headers() : HttpHeaders{
+  headers(): HttpHeaders {
     return new HttpHeaders({
       'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add the Bearer token here
       'Content-type': 'application/json',
@@ -31,12 +31,9 @@ export class UserService {
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json'
-        }
-      })
-      .pipe(tap(response => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('userId', response.userId);
-      }));
+        },
+        observe: 'response'
+      });
   }
 
   logout() {
@@ -65,13 +62,13 @@ export class UserService {
       "weight": user.weight,
       "basalMetabolicRate": user.basalMetabolicRate,
       "weightLossPerWeek": user.weightLossPerWeek,
-    }, {responseType: 'text'})
+    }, { responseType: 'text' })
   }
 
   getUser(id: number): Observable<User> {
     let headers = this.headers()
 
-    return this.http.get<User>(`${this.apiRoute}/${id}`, {headers})
+    return this.http.get<User>(`${this.apiRoute}/${id}`, { headers })
       .pipe(
         map(response => ({
           id: response.id,
@@ -89,7 +86,7 @@ export class UserService {
   updateUser(user: User): Observable<User> {
     let headers = this.headers()
 
-    return this.http.put<User>(this.apiRoute, { headers,
+    return this.http.put<User>(this.apiRoute, {
       "id": user.id,
       "name": user.name,
       "email": user.email,
@@ -97,13 +94,13 @@ export class UserService {
       "weight": user.weight,
       "basalMetabolicRate": user.basalMetabolicRate,
       "weightLossPerWeek": user.weightLossPerWeek
-    });
+    }, { headers });
   }
 
   deleteUser(id: number) {
     let headers = this.headers()
 
-    this.http.delete<User>(`${this.apiRoute}/${id}`, {headers});
+    this.http.delete<User>(`${this.apiRoute}/${id}`, { headers });
   }
 }
 

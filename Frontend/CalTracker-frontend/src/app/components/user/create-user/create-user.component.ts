@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 })
 
 export class CreateUserComponent {
-  newUser = new User('', '', '', 0, 0, 0.5);
+  newUser = new User('', '', '');
   emailInUse: boolean = false;
   bmrInfo: any = {
     height: null,
@@ -55,13 +55,7 @@ export class CreateUserComponent {
       error: (e) =>
         console.log("error creating user:", e),
       complete: () => {
-        this.userService.login(this.newUser.email, this.newUser.password).subscribe({
-          next: (response) => {
-            this.router.navigate(['/dashboard']);
-          },
-          error: (e) =>
-            console.log("login unsuccesfull", e)
-        })
+        this.router.navigate(['/login'])
       }
     });
   }

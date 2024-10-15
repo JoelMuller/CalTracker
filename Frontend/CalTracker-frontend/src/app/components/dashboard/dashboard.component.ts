@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexStroke, ApexGrid, NgApexchartsModule, ApexAnnotations, ApexYAxis } from 'ng-apexcharts';
+import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexStroke, ApexGrid, NgApexchartsModule, ApexAnnotations, ApexYAxis, ApexResponsive } from 'ng-apexcharts';
 import { FoodProductService } from '../../services/food-product.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -56,8 +56,8 @@ export class DashboardComponent {
   ngAfterViewInit() {
     this.userService.getUser(this.userService.getUserId()).subscribe({
       next: (response) => {
-        this.bmr = response.basalMetabolicRate - (response.weightLossPerWeek * 1000);
-        this.proteinGoal = response.weight * 2;
+        this.bmr = response.basalMetabolicRate! - (response.weightLossPerWeek! * 1000);
+        this.proteinGoal = response.weight! * 1.8; //1.6 - 2.4g per kg body weight is enough to maintain muscle
         this.updateChartOptions();
       },
       error: (e) => console.log("error getting user", e)

@@ -11,6 +11,9 @@
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
         </div>
     </div>
+    <div *ngIf="invalidCredentials" class="text-red-500">
+        Verkeerde email of wachtwoord.
+    </div>
     <div>
         <button type="submit"
             class="w-full bg-green text-white font-semibold py-2 px-4 rounded-md hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-green">

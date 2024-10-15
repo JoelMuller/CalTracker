@@ -39,6 +39,7 @@ export class LogFoodProductComponent {
   totalSearchItems = 0;
   totalPages = 2;
   currentPage = 1;
+  savedSearchResults?: SearchResults[] = [];
 
   //loading circle
   loading = false;
@@ -69,7 +70,6 @@ export class LogFoodProductComponent {
       complete: () =>
         this.logCustomFoodProduct(customFoodProduct, this.gramsConsumed)
     })
-    this.router.navigate(['/dashboard'])
   }
 
   logFoodProductByBarcode(barcode?: number, gramsConsumed?: number) {
@@ -91,7 +91,9 @@ export class LogFoodProductComponent {
           console.log("logged custom food product");
         },
         error: (e) =>
-          console.log("Error logging custom food product", e)
+          console.log("Error logging custom food product", e),
+        complete: () => 
+          this.router.navigate(['/dashboard'])
       })
   }
 
@@ -125,21 +127,33 @@ export class LogFoodProductComponent {
 
   searchFoodProducts(page: number) {
     if (page != 0 && this.totalPages >= page) {
-      this.loading = true;
-      this.foodProductService.searchFoodItems(this.searchTerms, page).subscribe({
-        next: (response) => {
-          this.searchResults = response;
-          this.totalSearchItems = response.count;
-          this.currentPage = response.page;
-          this.searchedBarcode = false;
-          this.searched = true;
-          this.totalPages = Math.ceil(this.totalSearchItems / 10)
-        },
-        error: (e) =>
-          console.log("error getting search results", e),
-        complete: () =>
-          this.loading = false
-      })
+      console.log("in first if saved search results", this.savedSearchResults?.some(a => a.page === page))
+      if (this.savedSearchResults?.some(a => a.page === page)) {
+        console.log("using saved search results");
+        let currentSearchResults = this.savedSearchResults.find(a => a.page === page);
+        this.searchResults = currentSearchResults
+        this.currentPage = currentSearchResults!.page
+        this.searchedBarcode = false;
+        this.searched = true;
+      } else {
+        this.loading = true;
+        this.foodProductService.searchFoodItems(this.searchTerms, page).subscribe({
+          next: (response) => {
+            this.searchResults = response;
+            this.savedSearchResults?.push(response);
+            console.log("in else saved search results:", this.savedSearchResults)
+            this.totalSearchItems = response.count;
+            this.currentPage = response.page;
+            this.searchedBarcode = false;
+            this.searched = true;
+            this.totalPages = Math.ceil(this.totalSearchItems / 10)
+          },
+          error: (e) =>
+            console.log("error getting search results", e),
+          complete: () =>
+            this.loading = false
+        })
+      }
     } else {
       console.log(this.totalPages)
       console.log("end of results")
@@ -156,7 +170,7 @@ export class LogFoodProductComponent {
           this.searchedBarcode = true;
           let regex = /(\d+\.?\d*)\s*g/;
           let match = response.servingSize.match(regex);
-          if(match){
+          if (match) {
             this.barcodeFoodItem.gramsConsumed = parseFloat(match[1])
           }
         }, error: (e) =>

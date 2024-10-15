@@ -1,8 +1,8 @@
 <div class="flex flex-col space-y-4">
   <!-- Date input, Eten Loggen button and chart boxes -->
-  <div class="flex w-full flex-col lg:flex-row lg:items-center space-y-2 md:space-y-0 md:space-x-4">
+  <div class="flex w-full flex-col space-y-2 md:space-y-0 md:flex-row md:items-center lg:space-y-0 lg:space-x-4">
     <!-- Left side with date input and button -->
-    <div class="flex flex-col w-1/2 lg:flex-row space-y-2 md:space-y-0 md:space-x-4">
+    <div class="flex flex-col space-y-2 md:w-1/2 md:items-start lg:flex-row lg:space-y-0 lg:space-x-4">
       <div class="flex items-center space-x-2">
         <label for="week" class="block text-md font-medium text-gray-700">Grafiek week:</label>
         <input type="date" id="week" name="week" [(ngModel)]="weekStart" (change)="updateWeek()"
@@ -16,26 +16,26 @@
     </div>
 
     <!-- Right side with clickable boxes -->
-    <div class="flex w-1/2 justify-end ml-auto space-x-4">
-      <div class="flex cursor-pointer border rounded-lg px-4 py-2 items-center" [class.bg-blue-500]="showCalChart"
+    <div class="flex flex-col justify-end space-y-2 md:ml-auto lg:w-full lg:flex-row lg:space-x-4 lg:space-y-0">
+      <div class="flex flex-shrink-0 cursor-pointer font-semibold border rounded-lg px-4 py-2 justify-center items-center text-center" [class.bg-green]="showCalChart"
         [class.text-white]="showCalChart" [class.opacity-100]="showCalChart" [class.bg-gray-200]="!showCalChart"
         [class.opacity-50]="!showCalChart" (click)="switchDiv(1)">
-        Calorieën grafiek
+        <span>Calorieën grafiek</span>
       </div>
 
-      <div class="flex cursor-pointer border rounded-lg px-4 py-2 items-center" [class.bg-blue-500]="showProtChart"
+      <div class="flex flex-shrink-0 cursor-pointer font-semibold border rounded-lg px-4 py-2 justify-center items-center text-center" [class.bg-green]="showProtChart"
         [class.text-white]="showProtChart" [class.opacity-100]="showProtChart" [class.bg-gray-200]="!showProtChart"
         [class.opacity-50]="!showProtChart" (click)="switchDiv(2)">
-        Proteïne grafiek
+        <span>Proteïne grafiek</span>
       </div>
     </div>
   </div>
 
-  <div *ngIf="showCalChart" class="mt-4">
+  <div *ngIf="showCalChart" class="mt-4 overflow-x-auto overflow-y-hidden">
     <apx-chart [series]="calChart.series" [chart]="calChart.chart" [xaxis]="calChart.xaxis" [yaxis]="calChart.yaxis"
       [title]="calChart.title" [grid]="calChart.grid" [annotations]="calChart.annotations"></apx-chart>
   </div>
-  
+
   <div *ngIf="showProtChart" class="mt-4">
     <apx-chart [series]="protChart.series" [chart]="protChart.chart" [xaxis]="protChart.xaxis" [yaxis]="protChart.yaxis"
       [title]="protChart.title" [grid]="protChart.grid" [annotations]="protChart.annotations"></apx-chart>
@@ -46,7 +46,7 @@
     <h2 class="font-semibold text-xl mb-2 border-b-4 border-vibrant-green">Gelogde items</h2>
 
     <!-- Logged Items List -->
-    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-7 gap-6 w-full mt-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-7 gap-6 w-full mt-4">
       <div *ngFor="let day of consumedFoodItems"
         class="p-4 bg-white border rounded-md shadow-md flex flex-col space-y-4 overflow-y-auto max-h-80">
         <h2 class="font-semibold">{{weekdays[day[0]]}}</h2>

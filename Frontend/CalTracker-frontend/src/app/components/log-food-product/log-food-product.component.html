@@ -1,12 +1,12 @@
-<div class="flex flex-col lg:flex-row md:flex-col">
+<div class="flex flex-col lg:flex-row">
     <div class="basis-1/2 px-5">
         <!-- on the left side of the page -->
         <div class="mb-5">
             <h2 class="font-semibold text-xl border-b-4 mb-2 border-vibrant-green">Voeg eigen product toe</h2>
             <!-- form to create custom food product -->
-            <form (ngSubmit)="createAndLogNewCustomFoodProduct()" #userForm="ngForm" class="space-y-4">
-                <div class="flex space-x-4">
-                    <div class="w-1/2">
+            <form (ngSubmit)="createAndLogNewCustomFoodProduct()" #userForm="ngForm" class="space-y-0 sm:space-y-4">
+                <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+                    <div class="w-full sm:w-1/2">
                         <label for="productName" class="block text-sm font-medium text-gray-700">Product naam*:</label>
                         <input type="text" id="productName" [(ngModel)]="newCustomFoodProduct.productName"
                             name="productName" placeholder="Caesarsalade" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
@@ -15,19 +15,19 @@
                             Product naam is verplicht om in te vullen.
                         </div>
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full sm:w-1/2">
                         <label for="servingSize" class="block text-sm font-medium text-gray-700">Portie grootte in
                             gram*:</label>
-                        <input type="text" id="servingSize" [(ngModel)]="newCustomFoodProduct.servingSize"
-                            name="servingSize" placeholder="100g" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
+                        <input type="number" id="servingSize" [(ngModel)]="newCustomFoodProduct.servingSize"
+                            name="servingSize" placeholder="100" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm
                                    ng-touched ng-invalid:border-red-500" #servingSize="ngModel" />
                         <div *ngIf="servingSize.invalid && servingSize.touched" class="text-red-500">
                             Portie grootte is verplicht om in te vullen.
                         </div>
                     </div>
                 </div>
-                <div class="flex space-x-4">
-                    <div class="w-1/2">
+                <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+                    <div class="w-full sm:w-1/2">
                         <label for="gramsConsumed" class="block text-sm font-medium text-gray-700">Gram
                             geconsumeerd*:</label>
                         <input type="number" id="gramsConsumed" [(ngModel)]="gramsConsumed" name="gramsConsumed"
@@ -37,7 +37,7 @@
                             Gram geconsumeerd is verplicht om in te vullen.
                         </div>
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full sm:w-1/2">
                         <label for="logDate" class="block text-sm font-medium text-gray-700">Log datum:</label>
                         <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
@@ -47,15 +47,15 @@
                 <!-- Nutriments -->
                 <h2 class="font-semibold text-lg">Voedingsstoffen, probeer zoveel mogelijk in te vullen</h2>
 
-                <div class="flex space-x-4">
-                    <div class="w-1/2">
+                <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+                    <div class="w-full sm:w-1/2">
                         <label for="energyKcal100g" class="block text-sm font-medium text-gray-700">Energy/kcal per
                             100g*</label>
                         <input type="number" id="energyKcal100g" [(ngModel)]="newNutriments.energyKcal100g"
                             name="energyKcal100g" step="0.1" placeholder="0.5" required
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full sm:w-1/2">
                         <label for="proteins100g" class="block text-sm font-medium text-gray-700">Proteïne/eiwitten per
                             100g</label>
                         <input type="number" id="proteins100g" [(ngModel)]="newNutriments.proteins100g"
@@ -63,29 +63,29 @@
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
                 </div>
-                <div class="flex space-x-4">
-                    <div class="w-1/2">
+                <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+                    <div class="w-full sm:w-1/2">
                         <label for="carbohydrates100g" class="block text-sm font-medium text-gray-700">Koolhydraten per
                             100g</label>
                         <input type="number" id="carbohydrates100g" [(ngModel)]="newNutriments.carbohydrates100g"
                             name="carbohydrates100g" step="0.1" placeholder="0.5"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full sm:w-1/2">
                         <label for="sugars100g" class="block text-sm font-medium text-gray-700">Suikers per 100g</label>
                         <input type="number" id="sugars100g" [(ngModel)]="newNutriments.sugars100g" name="sugars100g"
                             step="0.1" placeholder="0.5"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
                 </div>
-                <div class="flex space-x-4">
-                    <div class="w-1/2">
+                <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+                    <div class="w-full sm:w-1/2">
                         <label for="fat100g" class="block text-sm font-medium text-gray-700">Vet per 100g</label>
                         <input type="number" id="fat100g" [(ngModel)]="newNutriments.fat100g" name="fat100g" step="0.1"
                             placeholder="0.5"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full sm:w-1/2">
                         <label for="saturatedFat100g" class="block text-sm font-medium text-gray-700">Verzadigd vet per
                             100g</label>
                         <input type="number" id="saturatedFat100g" [(ngModel)]="newNutriments.saturatedFat100g"
@@ -93,18 +93,18 @@
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
                 </div>
-                <div class="flex space-x-4">
-                    <div class="w-1/2">
+                <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+                    <div class="w-full sm:w-1/2">
                         <label for="fiber100g" class="block text-sm font-medium text-gray-700">Vezels per 100g</label>
                         <input type="number" id="fiber100g" [(ngModel)]="newNutriments.fiber100g" name="fiber100g"
                             step="0.1" placeholder="0.5"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full sm:w-1/2">
                         <label for="sodium100g" class="block text-sm font-medium text-gray-700">Natrium per 100g</label>
                         <input type="number" id="sodium100g" [(ngModel)]="newNutriments.sodium100g" name="sodium100g"
                             step="0.1" placeholder="0.5"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
+                            class="mt-1 mb-2 sm:mb-0 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm" />
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
                 <div class="w-1/2">
                     <h2 class="font-semibold text-xl ">Eigen eet items</h2>
                 </div>
-                <div class="w-1/2 flex items-center justify-end">
+                <div class="w-1/2 flex flex-col sm:flex-row items-center justify-end text-sm sm:text-base">
                     <label for="logDate" class="mr-2 font-medium text-gray-700">Log datum:</label>
                     <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
                         class="px-3 py-1.5 mb-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
@@ -218,8 +218,8 @@
                 <div class="w-1/2">
                     <h2 class="font-semibold text-xl ">Zoek resultaten</h2>
                 </div>
-                <div class="w-1/2 flex items-center justify-end">
-                    <label for="logDate" class="mr-2 font-medium text-gray-700">Log datum:</label>
+                <div class="w-1/2 flex flex-col sm:flex-row items-center justify-end text-sm sm:text-base">
+                    <label for="logDate" class="mr-2 text-gray-700">Log datum:</label>
                     <input type="date" id="logDate" [(ngModel)]="logDate" name="logDate"
                         class="px-3 py-1.5 mb-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green focus:border-green sm:text-sm">
                 </div>

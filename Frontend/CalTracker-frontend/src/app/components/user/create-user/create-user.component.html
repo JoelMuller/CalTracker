@@ -1,7 +1,7 @@
 <div class="container mx-auto">
   <h2 class="text-xl font-semibold border-b-4 mb-2 border-vibrant-green">Registreren</h2>
-  <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="space-y-4">
-    <div class="flex flex-col md:flex-row md:space-x-4">
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="space-y-2 md:space-y-4">
+    <div class="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-4">
       <!-- Naam -->
       <div class="w-full">
         <label for="name" class="block text-sm font-medium text-gray-700">Naam:</label>
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row md:space-x-4">
+    <div class="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-4">
       <!-- Password -->
       <div class="w-full">
         <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord:</label>
@@ -49,7 +49,7 @@
 
     <!-- Calculate basal metabolic rate -->
     <h3 class="font-semibold border-b-4 mb-2 border-vibrant-green">Basaal metabolisme berekenen</h3>
-    <div class="flex flex-col md:flex-row md:space-x-4">
+    <div class="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-4">
       <div class="w-full">
         <label for="weight" class="block text-sm font-medium text-gray-700">Gewicht in kg:</label>
         <input type="number" id="weight" [(ngModel)]="newUser.weight" name="weight" placeholder="80" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-light-green focus:border-light-green sm:text-sm
@@ -94,33 +94,33 @@
       <div class="flex flex-col space-y-2">
         <span class="text-sm font-medium text-gray-700 border-b-2 border-vibrant-green">Activiteits niveau</span>
 
-        <label for="activity1" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+        <label for="activity1" class="flex w-full items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity1" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.2"
-            class="h-4 w-4 accent-green" />
-          <span>Weinig tot geen lichaamsbeweging zoals mensen met een kantoorbaan</span>
+            class="h-4 w-4 flex-shrink-0 accent-green" />
+          <span class="w-auto break-words">Weinig tot geen lichaamsbeweging zoals mensen met een kantoorbaan</span>
         </label>
 
-        <label for="activity2" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+        <label for="activity2" class="flex w-full items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity2" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.375"
-            class="h-4 w-4 accent-green" />
-          <span>Licht actief, 1 tot 3 keer per week sporten</span>
+            class="h-4 w-4 flex-shrink-0 accent-green" />
+          <span class="w-auto break-words">Licht actief, 1 tot 3 keer per week sporten</span>
         </label>
 
-        <label for="activity3" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+        <label for="activity3" class="flex w-full items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity3" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.55"
-            class="h-4 w-4 accent-green" />
+            class="h-4 w-4 flex-shrink-0 accent-green" />
           <span>Matig actief, 3 tot 5 keer per week sporten</span>
         </label>
 
-        <label for="activity4" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+        <label for="activity4" class="flex w-full items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity4" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.725"
-            class="h-4 w-4 accent-green" />
+            class="h-4 w-4 flex-shrink-0 accent-green" />
           <span>Zeer actief, regelmatig sporten of op meeste dagen intensief bewegen</span>
         </label>
 
-        <label for="activity5" class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+        <label for="activity5" class="flex w-full items-center space-x-2 text-sm font-medium text-gray-700">
           <input type="radio" id="activity5" [(ngModel)]="bmrInfo.activity" name="activity" [value]="1.9"
-            class="h-4 w-4 accent-green" />
+            class="h-4 w-4 flex-shrink-0 accent-green" />
           <span>Extra actief, intensieve training 6 tot 7 dagen per week en fysiek werk</span>
         </label>
       </div>

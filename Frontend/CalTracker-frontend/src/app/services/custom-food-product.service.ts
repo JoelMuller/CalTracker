@@ -20,10 +20,9 @@ export class CustomFoodProductService {
     });
   }
 
-
   createCustomFoodProduct(customFoodProduct: CustomFoodProduct): Observable<CustomFoodProduct> {
     let headers = this.headers()
-    return this.http.post<CustomFoodProduct>(this.apiRoute, {headers,
+    return this.http.post<CustomFoodProduct>(this.apiRoute, {
       "product_name": customFoodProduct.productName,
       "nutriments": {
         "energy-kcal_100g": customFoodProduct.nutriments.energyKcal100g,
@@ -37,7 +36,7 @@ export class CustomFoodProductService {
       },
       "serving_size": customFoodProduct.servingSize,
       "userId": customFoodProduct.userId
-    })
+    }, { headers })
   }
 
   getCustomFoodItemByUserIdAndCustomFoodProductId(userId: number, customFoodProductId: number): Observable<CustomFoodProduct> {
@@ -87,7 +86,7 @@ export class CustomFoodProductService {
   updateCustomFoodItem(customFoodProduct: CustomFoodProduct): Observable<CustomFoodProduct> {
     let headers = this.headers()
 
-    return this.http.put<CustomFoodProduct>(`${this.apiRoute}`, {headers,
+    return this.http.put<CustomFoodProduct>(`${this.apiRoute}`, {
       "id": customFoodProduct.id,
       "product_name": customFoodProduct.productName,
       "nutriments": {
@@ -102,7 +101,7 @@ export class CustomFoodProductService {
       },
       "serving_size": customFoodProduct.servingSize,
       "userId": customFoodProduct.userId
-    })
+    }, { headers })
   }
 
   deleteCustomFoodItem(customFoodProductId: number) {
