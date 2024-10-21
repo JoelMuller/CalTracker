@@ -46,7 +46,6 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(), loginRequest.getPassword())
             );
-//            User user = (User) authentication.getPrincipal();
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
             String jwt = jwtUtil.generateToken(userDetails);
             User user = userDetailsService.getUserByEmail(loginRequest.getEmail());
@@ -57,7 +56,7 @@ public class UserController {
             return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), user.getId(), roles));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -76,10 +75,9 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody @Valid UserDTO userDTO) {
         try {
             this.userService.createUser(userDTO);
-            System.out.println("in try after creating user");
             return ResponseEntity.status(HttpStatus.OK).body("User " + userDTO.getName() + " created");
         } catch (IllegalArgumentException e) {
-            System.out.println("in catch of create");
+            System.out.println("error over here" +e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

@@ -27,7 +27,7 @@ public class CustomFoodProductService {
                     .toDto(this.customFoodProductRepository
                             .save(CustomFoodProductTransformer.fromDto(customFoodProductDTO, user)));
         }else{
-            throw new RuntimeException("User with id: " + customFoodProductDTO.getUserId() + " does not exist");
+            throw new RuntimeException("User does not exist");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.jamgm.CalTracker.config;
 
+import com.jamgm.CalTracker.Interceptors.RateLimitFilter;
 import com.jamgm.CalTracker.authentication.JwtRequestFilter;
 import com.jamgm.CalTracker.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +27,8 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    @Autowired
+    private RateLimitFilter rateLimitFilter;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
     @Autowired
@@ -45,6 +47,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .formLogin(AbstractHttpConfigurer::disable) // Disable form login
