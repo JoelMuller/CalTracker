@@ -1,6 +1,8 @@
 package com.jamgm.CalTracker.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jamgm.CalTracker.Interceptors.RateLimitFilter;
+import com.jamgm.CalTracker.authentication.JwtRequestFilter;
 import com.jamgm.CalTracker.service.CustomFoodProductService;
 import com.jamgm.CalTracker.web.rest.DTO.CustomFoodProductDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,10 +28,12 @@ public class CustomFoodProductControllerTest {
 
     @MockBean
     private CustomFoodProductService customFoodProductService;
-
+    @MockBean
+    private RateLimitFilter rateLimitFilter;
+    @MockBean
+    private JwtRequestFilter jwtRequestFilter;
     @Autowired
     private WebApplicationContext webApplicationContext;
-
     @Autowired
     private MockMvc mockMvc;
 

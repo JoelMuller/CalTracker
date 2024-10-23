@@ -1,15 +1,20 @@
 package com.jamgm.CalTracker.repository;
 
+import com.jamgm.CalTracker.config.TestApplicationContext;
 import com.jamgm.CalTracker.model.CustomFoodProduct;
 import com.jamgm.CalTracker.model.LogFoodProduct;
 import com.jamgm.CalTracker.model.Nutriments;
 import com.jamgm.CalTracker.model.User;
+import com.jamgm.CalTracker.service.OpenFoodFactsApiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -18,14 +23,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Transactional
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@ContextConfiguration(classes = TestApplicationContext.class)
+@ActiveProfiles("test")
 public class LogFoodProductRepositoryTest {
     @Autowired
     private LogFoodProductRepository logFoodProductRepository;
     @Autowired
     private UserRepository userRepository;
+    @MockBean
+    private OpenFoodFactsApiService openFoodFactsApiService;
     @Autowired
     private CustomFoodProductRepository customFoodProductRepository;
 
@@ -56,16 +64,19 @@ public class LogFoodProductRepositoryTest {
         customFoodProduct.setNutriments(nutriments);
         user1.setCustomFoodProducts(List.of(customFoodProduct));
         LogFoodProduct logFoodProductBarcode1 = LogFoodProduct.builder()
+                .gramsConsumed(20.0)
                 .foodProductBarcode("123")
                 .date(LocalDate.of(2024, 1, 1))
                 .user(user1)
                 .build();
         LogFoodProduct logFoodProductBarcode2 = LogFoodProduct.builder()
+                .gramsConsumed(50.0)
                 .foodProductBarcode("1234")
                 .date(LocalDate.of(2024, 1, 2))
                 .user(user1)
                 .build();
         LogFoodProduct logFoodProductCustom = LogFoodProduct.builder()
+                .gramsConsumed(60.0)
                 .date(LocalDate.of(2024, 1, 1))
                 .user(user1)
                 .customFoodProduct(customFoodProduct)
@@ -93,6 +104,7 @@ public class LogFoodProductRepositoryTest {
     public void testCreateLogFoodProduct(){
         User user = userRepository.findByName("testuser1");
         LogFoodProduct logFoodProduct = LogFoodProduct.builder()
+                .gramsConsumed(20.0)
                 .foodProductBarcode("987")
                 .date(LocalDate.of(2024, 2, 2))
                 .user(user)

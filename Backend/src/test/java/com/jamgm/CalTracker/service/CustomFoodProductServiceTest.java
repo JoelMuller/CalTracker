@@ -7,9 +7,7 @@ import com.jamgm.CalTracker.repository.CustomFoodProductRepository;
 import com.jamgm.CalTracker.repository.UserRepository;
 import com.jamgm.CalTracker.web.rest.DTO.CustomFoodProductDTO;
 import com.jamgm.CalTracker.web.rest.DTO.NutrimentsDTO;
-import com.jamgm.CalTracker.web.rest.DTO.UserDTO;
 import com.jamgm.CalTracker.web.rest.transformer.CustomFoodProductTransformer;
-import com.jamgm.CalTracker.web.rest.transformer.UserTransformer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +33,12 @@ public class CustomFoodProductServiceTest {
     private User user;
     private CustomFoodProduct customFoodProduct;
     private CustomFoodProductDTO customFoodProductDTO;
+    private CustomFoodProductDTO customFoodProductDTOWithoutUser;
     private NutrimentsDTO nutrimentsDTO;
     private Nutriments nutriments;
+
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         reset(customFoodProductRepository);
 
         user = User.builder()
@@ -86,6 +86,13 @@ public class CustomFoodProductServiceTest {
                 .sodium100g(1.0)
                 .build();
         customFoodProductDTO.setNutriments(nutrimentsDTO);
+
+        customFoodProductDTOWithoutUser = CustomFoodProductDTO.builder()
+                .id("1")
+                .product_name("Test Product")
+                .serving_size("100g")
+                .userId(1L)
+                .build();
     }
 
     @Test
@@ -111,6 +118,15 @@ public class CustomFoodProductServiceTest {
             verify(customFoodProductRepository).save(any(CustomFoodProduct.class));
             assertEquals(customFoodProductDTO, result);
         }
+    }
+
+    @Test
+    public void testCreateCustomFoodProductUserNotFound() {
+        when(userRepository.existsById(anyLong())).thenReturn(false);
+
+        Exception thrown = assertThrows(RuntimeException.class,
+                () -> customFoodProductService.createCustomFoodProduct(customFoodProductDTOWithoutUser));
+        assertTrue(thrown.getMessage().contains("User does not exist"));
     }
 
     @Test

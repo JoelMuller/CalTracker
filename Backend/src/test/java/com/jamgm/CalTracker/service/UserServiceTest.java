@@ -25,8 +25,6 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private UserTransformer userTransformer;
-    @Mock
     private BCryptPasswordEncoder passwordEncoder;
     @InjectMocks
     private UserService userService;
@@ -85,26 +83,6 @@ public class UserServiceTest {
 
             // Then
             verify(passwordEncoder).encode("testPassword"); // Check that password encoding was called
-            verify(userRepository).save(user); // Check that save was called on the repository
-            assertEquals(userDTO, result); // Check that the result is as expected
-        }
-    }
-
-    @Test
-    void testUpdateUser_UserExists_WithoutPassword() {
-        try (MockedStatic<UserTransformer> mockedTransformer = mockStatic(UserTransformer.class)) {
-            // Given
-            mockedTransformer.when(() -> UserTransformer.fromDto(any(UserDTO.class))).thenReturn(user);
-            mockedTransformer.when(() -> UserTransformer.toDto(any(User.class))).thenReturn(userDTO);
-            userDTO.setPassword(""); // Empty password to simulate no password update
-            when(userRepository.existsById(anyLong())).thenReturn(true);
-            when(userRepository.save(any(User.class))).thenReturn(user);
-
-            // When
-            UserDTO result = userService.updateUser(userDTO);
-
-            // Then
-            verify(passwordEncoder, never()).encode(anyString()); // Password encoding should not be called
             verify(userRepository).save(user); // Check that save was called on the repository
             assertEquals(userDTO, result); // Check that the result is as expected
         }

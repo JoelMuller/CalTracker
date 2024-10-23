@@ -40,6 +40,7 @@ public class OpenFoodFactsApiService {
             }
         } catch (Exception e) {
             System.out.println("Error occurred while fetching food item by barcode: " + e.getMessage());
+            return null;
         }
         return null;
     }

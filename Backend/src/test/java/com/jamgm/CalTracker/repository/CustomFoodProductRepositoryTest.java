@@ -1,14 +1,19 @@
 package com.jamgm.CalTracker.repository;
 
+import com.jamgm.CalTracker.config.TestApplicationContext;
 import com.jamgm.CalTracker.model.CustomFoodProduct;
 import com.jamgm.CalTracker.model.Nutriments;
 import com.jamgm.CalTracker.model.User;
+import com.jamgm.CalTracker.service.OpenFoodFactsApiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,12 +21,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Transactional
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@ContextConfiguration(classes = TestApplicationContext.class)
+@ActiveProfiles("test")
 public class CustomFoodProductRepositoryTest {
     @Autowired
     private CustomFoodProductRepository customFoodProductRepository;
+    @MockBean
+    private OpenFoodFactsApiService openFoodFactsApiService;
     @Autowired
     private UserRepository userRepository;
 
