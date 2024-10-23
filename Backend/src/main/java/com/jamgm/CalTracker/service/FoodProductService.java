@@ -11,15 +11,11 @@ import com.jamgm.CalTracker.web.rest.transformer.CustomFoodProductTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.FoodProductTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.LoggedFoodProductsTransformer;
 import com.jamgm.CalTracker.web.rest.transformer.SearchItemsTransformer;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FoodProductService {
