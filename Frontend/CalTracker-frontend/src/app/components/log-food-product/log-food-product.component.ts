@@ -9,14 +9,13 @@ import { FoodProduct } from '../../models/food-product.model';
 import { SearchResults } from '../../models/search-results.model';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { BarcodeScannerLivestreamComponent, BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-log-food-product',
   standalone: true,
-  imports: [FormsModule, CommonModule, BarcodeScannerLivestreamModule, ZXingScannerModule],
+  imports: [FormsModule, CommonModule, ZXingScannerModule],
   templateUrl: './log-food-product.component.html',
   styleUrl: './log-food-product.component.scss'
 })
