@@ -52,11 +52,9 @@ public class FoodProductController {
         }
     }
 
-
     @PostMapping(value = "/log")
     @Operation(summary = "Logs given custom food item or barcode for a user")
     public ResponseEntity<Void> logFoodItem(@RequestBody @Valid LogFoodProductDTO logFoodProductDTO){
-
         this.foodProductService.logFoodItem(logFoodProductDTO);
         return ResponseEntity.ok().build();
     }
@@ -75,6 +73,7 @@ public class FoodProductController {
         LocalDate givenDate = LocalDate.parse(date);
         return ResponseEntity.ok(this.foodProductService.getAllLoggedFoodItemsByDate(givenDate, userId));
     }
+
     @GetMapping(value = "/get-protein-consumed-by-day")
     public ResponseEntity<Double> getProteinsConsumedByDay(@RequestParam("userId") final long userId,
                                                  @RequestParam("date") final String date){
