@@ -28,7 +28,7 @@ jobs:
         run: npm run build --output-path=dist/CalTracker-frontend  # Ensure path matches angular.json
 
       - name: List dist contents
-        run: ls -R dist/CalTracker-frontend
+        run: ls -R ../../dist/CalTracker-frontend
 
       - name: check current folder
         run: pwd
@@ -37,5 +37,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ../dist/CalTracker-frontend  # Make sure this path matches the output path in the previous step
+          publish_dir: ../../dist/CalTracker-frontend  # Make sure this path matches the output path in the previous step
           keep_files: false  # Optional: keeps files on gh-pages not overwritten by new build
