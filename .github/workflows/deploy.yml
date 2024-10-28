@@ -23,7 +23,7 @@ jobs:
         working-directory: ./Frontend/CalTracker-frontend  # Set working directory for Angular project
 
       - name: Build Angular project
-        run: npm run build -- --configuration production
+        run: npm run build
         working-directory: ./Frontend/CalTracker-frontend  # Set working directory for build
 
       - name: List dist contents
