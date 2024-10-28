@@ -34,5 +34,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/CalTracker-frontend  # Make sure this path matches the output path in the previous step
+          publish_dir: ./dist/CalTracker-frontend/browser  # Make sure this path matches the output path in the previous step
           keep_files: true  # Optional: keeps files on gh-pages not overwritten by new build
