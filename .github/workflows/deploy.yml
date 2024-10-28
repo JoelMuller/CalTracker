@@ -26,12 +26,15 @@ jobs:
         run: npm run build
         working-directory: ./Frontend/CalTracker-frontend  # Set working directory for build
 
-      - name: List dist contents
-        run: ls -R ./Frontend/CalTracker-frontend/dist/CalTracker-frontend  # Verify contents of the dist folder
+      - name: Create a publish directory
+        run: mkdir -p ./gh-pages  # Create a temporary directory for publishing
 
+      - name: Copy built files
+        run: cp -R ./Frontend/CalTracker-frontend/dist/CalTracker-frontend/* ./gh-pages/
+        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Frontend/CalTracker-frontend/dist/CalTracker-frontend  # Path to the built app directory
+          publish_dir: ./gh-pages  # Publish from the temporary directory
           keep_files: false
