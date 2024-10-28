@@ -30,7 +30,7 @@ jobs:
         run: mkdir -p ./gh-pages  # Create a temporary directory for publishing
 
       - name: Copy built files
-        run: cp -R ./Frontend/CalTracker-frontend/dist/CalTracker-frontend/* ./gh-pages/
+        run: cp -R ./Frontend/CalTracker-frontend/dist/browser/* ./gh-pages/
         
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
