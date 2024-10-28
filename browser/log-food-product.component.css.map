@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/log-food-product/log-food-product.component.scss"],
+  "sourcesContent": [".spinner {\n    border: 4px solid rgba(0, 0, 0, 0.1);\n    width: 36px;\n    height: 36px;\n    border-radius: 50%;\n    border-left-color: #007BFF;\n    animation: spin 1s ease infinite;\n    margin: auto;\n    margin-bottom: 6px;\n  }\n  \n  @keyframes spin {\n    0% {\n      transform: rotate(0deg);\n    }\n    100% {\n      transform: rotate(360deg);\n    }\n  }\n\nvideo {\n  border-radius: 50%;\n  object-fit: cover;\n}"],
+  "mappings": ";AAAA,CAAA;AACI,UAAA,IAAA,MAAA,KAAA,CAAA,EAAA,CAAA,EAAA,CAAA,EAAA;AACA,SAAA;AACA,UAAA;AACA,iBAAA;AACA,qBAAA;AACA,aAAA,KAAA,GAAA,KAAA;AACA,UAAA;AACA,iBAAA;;AAGF,WALE;AAMA;AACE,eAAA,OAAA;;AAEF;AACE,eAAA,OAAA;;;AAIN;AACE,iBAAA;AACA,cAAA;;",
+  "names": []
+}
